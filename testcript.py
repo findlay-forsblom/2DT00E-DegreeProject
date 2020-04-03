@@ -38,8 +38,18 @@ luftFuktighet.rename(columns={'Datum':'Date', 'Relativ Luftfuktighet':'Luftfukti
 grouped = luftFuktighet.groupby('Date')
 luftFuktighet = grouped.mean()
 
-dfs = [snowdepth, airtemp, typeofFall, fallAmount, luftFuktighet]
+col = snowdepth['Snow Depth']
+col.drop(col.head(1).index,inplace=True)
+col= col.append(pd.Series([6]), ignore_index=True)
+snowdepth['Depth +day1'] = col
+snowdepth.drop(snowdepth.tail(1).index,inplace=True)
 
+dfs = [snowdepth, airtemp]
+
+df_final = reduce(lambda left,right: pd.merge(left,right,on='Date', how='left'), dfs)
+
+df_final.dropna(inplace=True)
+dfs = [df_final, typeofFall, fallAmount, luftFuktighet]
 df_final = reduce(lambda left,right: pd.merge(left,right,on='Date', how='left'), dfs)
 
 dataset = df_final.copy()
@@ -49,15 +59,42 @@ dataset['Precip Amount']= dataset['Precip Amount'].fillna(value=dataset['Precip 
 dataset['Luftfuktighet'] = dataset['Luftfuktighet'].fillna(value=dataset['Luftfuktighet'].mean()) 
 dataset['Precip Amount'] = dataset['Precip Amount'] * (10**-3) 
 
-#test = df_final.copy()
-col = df_final['Snow Depth']
- 
-col.drop(col.head(1).index,inplace=True)
-col= col.append(pd.Series([6]), ignore_index=True)
-
-dataset['Depth +day1'] = col
-dataset.drop(dataset.tail(1).index,inplace=True)
-dataset.dropna(inplace=True) #Drops only the missing temperature values
-
-
 dataset = dataset[dataset['Temp'] < 10]
+
+X = dataset.iloc[:, [1, 3,4,5,6]].values
+y = dataset.iloc[:, 2].values
+
+
+# Encoding categorical data
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import make_column_transformer
+
+preprocessor = make_column_transformer( (OneHotEncoder(),[2]),remainder="passthrough")
+X = preprocessor.fit_transform(X).toarray()
+
+# Avoiding the Dummy Variable Trap
+X = X[:, 1:]
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, random_state = 0)
+
+
+# Fitting Multiple Linear Regression to the Training set
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = regressor.predict(X_test)
+y_pred = np.round(y_pred, 2)
+
+
+
+
+
+
+
+
+
+
