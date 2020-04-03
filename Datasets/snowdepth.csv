@@ -1,26 +1,15 @@
-Stationsnamn;Klimatnummer;Mäthöjd (meter över marken);;;
-Växjö D;64520;0.0;;;
-;;;;;
-Parameternamn;Beskrivning;Enhet;;;
-Snödjup;momentanvärde, 1 gång/dygn, kl 06;metre;;;
-;;;;;
-Tidsperiod (fr.o.m);Tidsperiod (t.o.m);Höjd (meter över havet);Latitud (decimalgrader);Longitud (decimalgrader);
-1881-10-01 00:00:00;2001-03-31 23:59:59;166.0;56.8697;14.8004;
-2002-10-01 00:00:00;2006-11-30 23:59:59;170.0;56.8427;14.8176;
-2011-05-01 00:00:00;2019-04-30 23:59:59;162.0;56.8809;14.8257;
-;;;;;
-Datum;Tid (UTC);Snödjup;Kvalitet;;Tidsutsnitt:
-1881-10-26;07:00:00;0.00;G;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
-1881-10-27;07:00:00;0.00;G;;Tidsperiod (fr.o.m.) = 1881-10-01 00:00:00 (UTC)
-1881-11-06;07:00:00;0.00;G;;Tidsperiod (t.o.m.) = 2019-04-30 23:59:59 (UTC)
-1881-11-07;07:00:00;0.00;G;;Samplingstid = Ej angivet
+Datum;Tid (UTC);Snödjup;Kvalitet;;
+1881-10-26;07:00:00;0.00;G;;
+1881-10-27;07:00:00;0.00;G;;
+1881-11-06;07:00:00;0.00;G;;
+1881-11-07;07:00:00;0.00;G;;
 1881-11-08;07:00:00;0.00;G;;
-1881-11-09;07:00:00;0.00;G;;Kvalitetskoderna:
-1881-11-10;07:00:00;0.00;G;;Grön (G) = Kontrollerade och godkända värden.
-1881-11-11;07:00:00;0.00;G;;Gul (Y) = Misstänkta eller aggregerade värden. Grovt kontrollerade arkivdata och okontrollerade realtidsdata (senaste 2 tim).
+1881-11-09;07:00:00;0.00;G;;
+1881-11-10;07:00:00;0.00;G;;
+1881-11-11;07:00:00;0.00;G;;
 1881-11-12;07:00:00;0.00;G;;
-1881-11-13;07:00:00;0.00;G;;Orsaker till saknade data:
-1881-11-14;07:00:00;0.00;G;;  stationen eller givaren har varit ur funktion.
+1881-11-13;07:00:00;0.00;G;;
+1881-11-14;07:00:00;0.00;G;;
 1881-11-15;07:00:00;0.00;G;;
 1881-11-16;07:00:00;0.00;G;;
 1881-11-17;07:00:00;0.00;G;;

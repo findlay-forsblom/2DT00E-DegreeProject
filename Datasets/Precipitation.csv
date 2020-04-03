@@ -1,26 +1,14 @@
-Stationsnamn;Klimatnummer;Mäthöjd (meter över marken);;;;
-Växjö D;64520;2.0;;;;
-;;;;;;
-Parameternamn;Beskrivning;Enhet;;;;
-Nederbörd;1 gång/dygn, kl 18;code;;;;
-;;;;;;
-Tidsperiod (fr.o.m);Tidsperiod (t.o.m);Höjd (meter över havet);Latitud (decimalgrader);Longitud (decimalgrader);;
-1961-01-01 00:00:00;2001-08-31 23:59:59;166.0;56.8697;14.8004;;
-2002-10-01 00:00:00;2006-11-30 23:59:59;170.0;56.8427;14.8176;;
-2011-05-01 00:00:00;2019-09-17 23:59:59;162.0;56.8809;14.8257;;
-;;;;;;
-Från Datum Tid (UTC);Till Datum Tid (UTC);Representativt dygn;Nederbörd;Kvalitet;;Tidsutsnitt:
-1960-12-31 18:00:01;1961-01-01 18:00:00;1961-01-01;snowfall;G;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
-1961-01-01 06:00:01;1961-01-02 06:00:00;1961-01-01;snowfall;Y;;Tidsperiod (fr.o.m.) = 1961-01-01 00:00:00 (UTC)
-1961-01-01 18:00:01;1961-01-02 18:00:00;1961-01-02;snowfall;G;;Tidsperiod (t.o.m.) = 2019-09-17 23:59:59 (UTC)
-1961-01-02 06:00:01;1961-01-03 06:00:00;1961-01-02;snowfall;Y;;Samplingstid = 24 timmar
+Från Datum Tid (UTC);Till Datum Tid (UTC);Representativt dygn;Nederbörd;Kvalitet;;
+1960-12-31 18:00:01;1961-01-01 18:00:00;1961-01-01;snowfall;G;;
+1961-01-01 06:00:01;1961-01-02 06:00:00;1961-01-01;snowfall;Y;;
+1961-01-01 18:00:01;1961-01-02 18:00:00;1961-01-02;snowfall;G;;
+1961-01-02 06:00:01;1961-01-03 06:00:00;1961-01-02;snowfall;Y;;
 1961-01-02 18:00:01;1961-01-03 18:00:00;1961-01-03;snowfall;G;;
-1961-01-02 18:00:01;1961-01-03 18:00:00;1961-01-03;snöblandat regn;G;;Kvalitetskoderna:
-1961-01-03 06:00:01;1961-01-04 06:00:00;1961-01-03;snöblandat regn;Y;;Grön (G) = Kontrollerade och godkända värden.
-1961-01-03 18:00:01;1961-01-04 18:00:00;1961-01-04;snowfall;G;;Gul (Y) = Misstänkta eller aggregerade värden. Grovt kontrollerade arkivdata och okontrollerade realtidsdata (senaste 2 tim).
-1961-01-04 06:00:01;1961-01-05 06:00:00;1961-01-04;snowfall;Y;;
-1961-01-04 18:00:01;1961-01-05 18:00:00;1961-01-05;snowfall;G;;Orsaker till saknade data:
-1961-01-04 18:00:01;1961-01-05 18:00:00;1961-01-05;regn;G;;  stationen eller givaren har varit ur funktion.
+1961-01-02 18:00:01;1961-01-03 18:00:00;1961-01-03;snöblandat regn;G;;
+1961-01-03 06:00:01;1961-01-04 06:00:00;1961-01-03;snöblandat regn;Y;;G
+1961-01-03 18:00:01;1961-01-04 18:00:00;1961-01-04;snowfall;G;;
+1961-01-04 18:00:01;1961-01-05 18:00:00;1961-01-05;snowfall;G;;
+1961-01-04 18:00:01;1961-01-05 18:00:00;1961-01-05;regn;G;;  
 1961-01-05 06:00:01;1961-01-06 06:00:00;1961-01-05;regn;Y;;
 1961-01-06 06:00:01;1961-01-07 06:00:00;1961-01-06;snowfall;Y;;
 1961-01-06 18:00:01;1961-01-07 18:00:00;1961-01-07;regn;G;;

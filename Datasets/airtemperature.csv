@@ -1,24 +1,16 @@
-Stationsnamn;Klimatnummer;Mäthöjd (meter över marken);;;;
-Berg;74080;2.0;;;;
-;;;;;;
-Parameternamn;Beskrivning;Enhet;;;;
-Lufttemperatur;medelvärde 1 dygn, 1 gång/dygn, kl 00;degree celsius;;;;
-;;;;;;
-Tidsperiod (fr.o.m);Tidsperiod (t.o.m);Höjd (meter över havet);Latitud (decimalgrader);Longitud (decimalgrader);;
-1969-07-01 00:00:00;2020-03-31 23:59:59;250.0;57.1210;14.6931;;
-;;;;;;
-Från Datum Tid (UTC);Till Datum Tid (UTC);Representativt dygn;Lufttemperatur;Kvalitet;;Tidsutsnitt:
-1969-07-01 00:00:01;1969-07-02 00:00:00;1969-07-01;14.4;Y;;Kvalitetskontrollerade historiska data (utom de senaste 3 mån)
-1969-07-02 00:00:01;1969-07-03 00:00:00;1969-07-02;13.5;Y;;Tidsperiod (fr.o.m.) = 1969-07-01 00:00:00 (UTC)
-1969-07-03 00:00:01;1969-07-04 00:00:00;1969-07-03;14.7;Y;;Tidsperiod (t.o.m.) = 2020-01-01 06:00:00 (UTC)
-1969-07-04 00:00:01;1969-07-05 00:00:00;1969-07-04;13.5;Y;;Medelvärdet är beräknat för = 24 timmar
+
+Från Datum Tid (UTC);Till Datum Tid (UTC);Representativt dygn;Lufttemperatur;Kvalitet;;
+1969-07-01 00:00:01;1969-07-02 00:00:00;1969-07-01;14.4;Y;;
+1969-07-02 00:00:01;1969-07-03 00:00:00;1969-07-02;13.5;Y;;
+1969-07-03 00:00:01;1969-07-04 00:00:00;1969-07-03;14.7;Y;;
+1969-07-04 00:00:01;1969-07-05 00:00:00;1969-07-04;13.5;Y;;
 1969-07-05 00:00:01;1969-07-06 00:00:00;1969-07-05;14.2;Y;;
-1969-07-06 00:00:01;1969-07-07 00:00:00;1969-07-06;13.5;Y;;Kvalitetskoderna:
-1969-07-07 00:00:01;1969-07-08 00:00:00;1969-07-07;13.4;Y;;Grön (G) = Kontrollerade och godkända värden.
-1969-07-08 00:00:01;1969-07-09 00:00:00;1969-07-08;13.3;Y;;Gul (Y) = Misstänkta eller aggregerade värden. Grovt kontrollerade arkivdata och okontrollerade realtidsdata (senaste 2 tim).
+1969-07-06 00:00:01;1969-07-07 00:00:00;1969-07-06;13.5;Y;;
+1969-07-07 00:00:01;1969-07-08 00:00:00;1969-07-07;13.4;Y;;
+1969-07-08 00:00:01;1969-07-09 00:00:00;1969-07-08;13.3;Y;;
 1969-07-09 00:00:01;1969-07-10 00:00:00;1969-07-09;12.4;Y;;
-1969-07-10 00:00:01;1969-07-11 00:00:00;1969-07-10;12.9;Y;;Orsaker till saknade data:
-1969-07-11 00:00:01;1969-07-12 00:00:00;1969-07-11;11.7;Y;;  stationen eller givaren har varit ur funktion.
+1969-07-10 00:00:01;1969-07-11 00:00:00;1969-07-10;12.9;Y;;
+1969-07-11 00:00:01;1969-07-12 00:00:00;1969-07-11;11.7;Y;; 
 1969-07-12 00:00:01;1969-07-13 00:00:00;1969-07-12;14.2;Y;;
 1969-07-13 00:00:01;1969-07-14 00:00:00;1969-07-13;16.2;Y;;
 1969-07-14 00:00:01;1969-07-15 00:00:00;1969-07-14;16.0;Y;;
