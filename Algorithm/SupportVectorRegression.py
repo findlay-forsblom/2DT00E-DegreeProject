@@ -42,6 +42,31 @@ polys= []
 mse = []
 y_test = sc_y.inverse_transform(y_test)
 y_test = y_test.flatten()
+y_train = y_train.flatten()
+regressor = SVR(kernel = 'poly', degree = 10)
+regressor.fit(X_train, y_train)
+
+y_pred = regressor.predict(X_test)
+y_pred = sc_y.inverse_transform(y_pred)
+
+polys = list(range(1,7))
+Cs = np.arange(1,1000, 300)
+epsilons = np.linspace(0,1,11)
+# Applying Grid Search to find the best model and the best parameters
+from sklearn.model_selection import GridSearchCV
+parameters = [{'kernel': ['poly', 'linear', 'rbf'], 'degree': polys, 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
+grid_search = GridSearchCV(estimator = regressor,
+                           param_grid = parameters,
+                           cv = 10,
+                           n_jobs = -1)
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_
+
+
+
+
+
 for k in range(1, 10):
     regressor = SVR(kernel = 'poly', degree = k)
     regressor.fit(X_train, y_train.flatten())

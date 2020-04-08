@@ -47,8 +47,13 @@ mse = np.array(mse)
 posmin = mse.argmin()
 print(f'{testks[posmin]} with the best k')
 
-neigh = KNeighborsRegressor(n_neighbors=3)
+neigh = KNeighborsRegressor(n_neighbors=5)
 neigh.fit(X_train, y_train)
 
 y_pred = neigh.predict(X_test)
 y_pred = np.round(y_pred, 2)
+
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = neigh, X = X_train, y = y_train, cv = 10)
+accuracies.mean()
+accuracies.std()

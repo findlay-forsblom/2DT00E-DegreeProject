@@ -39,3 +39,8 @@ y_pred = regressor.predict(X_test)
 sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
 print(sums)
+
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = regressor, X = X_train, y = y_train, cv = 10)
+accuracies.mean()
+accuracies.std()

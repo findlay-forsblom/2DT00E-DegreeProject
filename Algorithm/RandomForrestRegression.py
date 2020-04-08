@@ -62,6 +62,11 @@ sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6) 
 print(sums)
 
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = regressor, X = X_train, y = y_train, cv = 10)
+accuracies.mean()
+accuracies.std()
+
 fig3, ax3 = plt.subplots()
 err = ax3.plot(trees, mse, label= 'MSE values ')
 best = ax3.plot(trees[posmin], mse[posmin], '-o',color = 'red', label= 'Optimal number of Trees')
