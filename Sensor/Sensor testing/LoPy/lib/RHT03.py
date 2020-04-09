@@ -102,4 +102,5 @@ def run_sensor():
         else:
             raise ValueError('Checksum error.')
     else:
+        print('NOT 80 BITS!!!!!!')
         raise ValueError('Wrong sensor output.')

@@ -23,32 +23,9 @@ CALIBRATION = 200
 
 SENSOR_NAME = 'HC_SR04'
 
-# Analog pin for temperature readings.
-adc = ADC()                             # create an ADC object
-analog_pin = adc.channel(pin='P16')     # create an analog pin on P16
-
 # Trigger and echo pin configurations.
 trigger = Pin('P19', mode=Pin.OUT)
 echo = Pin('P20', mode=Pin.IN)
-
-# # Calibrate initial sensor distance to target.
-# def calibrate(trigger, echo, analog_pin):
-#     pycom.rgbled(palette.COLOUR_DARKYELLOW)
-#     print('Starting calibration..')
-#     median_list = []
-#     counter = 0
-#     for i in range(CALIBRATION):
-#         counter = counter + 1
-#         median_list.append(run_sensor(trigger, echo, analog_pin))
-#
-#     median_list.sort()
-#
-#     global distance
-#     distance = median_list[int(counter/2)]
-#     median_list.clear()
-#
-#     print('Distance calibrated: ', distance)
-#     return distance
 
 def name():
     return 'HC_SR04'
@@ -80,8 +57,9 @@ def run_sensor(temp):
 
     # RHT03 humidity/temperature sensor
     # humid, T_A = RHT.run_sensor(analog_pin)
-
-    speed_sound = (331.4 + 0.6 * temp) * 0.0001        # cm/us
-
+    if(isinstance(temp, str) == False):
+        speed_sound = (331.4 + 0.6 * temp) * 0.0001        # cm/us
+    else:
+        speed_sound = 331.4 * 0.0001        # cm/us
     # Calculate and print out distance measured.
     return ((utime.ticks_diff(finish, start)) * speed_sound)/2
