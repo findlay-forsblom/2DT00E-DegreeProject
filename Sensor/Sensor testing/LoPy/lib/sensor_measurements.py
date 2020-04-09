@@ -29,5 +29,4 @@ def measure(sensor, temp, iter = 200):
     distance = median_list[int(counter/2)]
     median_list.clear()
 
-    print('Distance calibrated: ', distance)
     return distance

@@ -93,6 +93,8 @@ def sendrecv(message = ''):
 
     pycom.rgbled(palette.COLOUR_DARKBLUE)
 
+    # TBC......
+
     # Check for messages received.
     # for i in range(10):
     #     ack = recv_msg()
