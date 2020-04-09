@@ -49,9 +49,9 @@ regressor.fit(X_train, y_train)
 y_pred = regressor.predict(X_test)
 y_pred = sc_y.inverse_transform(y_pred)
 
-polys = list(range(1,7))
+polys = list(range(1,4))
 Cs = np.arange(1,1000, 300)
-epsilons = np.linspace(0,1,11)
+epsilons = np.arange(0,0.5,0.02)
 # Applying Grid Search to find the best model and the best parameters
 from sklearn.model_selection import GridSearchCV
 parameters = [{'kernel': ['poly', 'linear', 'rbf'], 'degree': polys, 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
@@ -84,7 +84,7 @@ posmin = mse.argmin()
 print(f'{polys[posmin]} with the best k')
 
 
-regressor = SVR(kernel = 'poly', degree = 3)
+regressor = SVR(kernel = 'poly', degree = 7, epsilon = 0.2, gamma = 0.5)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)
@@ -94,7 +94,7 @@ sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
 print(sums)
 
-regressor = SVR(kernel = 'rbf')
+regressor = SVR(kernel = 'rbf', epsilon = 1, gamma = 0.08)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)
@@ -104,7 +104,7 @@ sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
 print(sums)
 
-regressor = SVR(kernel = 'linear')
+regressor = SVR(kernel = 'linear', epsilon = 0.02, gamma = 0.1)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)
