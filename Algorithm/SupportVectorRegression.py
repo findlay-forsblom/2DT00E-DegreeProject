@@ -8,6 +8,7 @@ Created on Mon Apr  6 13:25:18 2020
 
 import numpy as np
 from readfiles import ReadFiles
+import autosklearn.classification
 
 files = ReadFiles(['./Datasets/SnowDepth.csv','./Datasets/Airtemperature.csv', './Datasets/Precipitation.csv', './Datasets/FallAmount.csv', './Datasets/humidity.csv' ])
 dataset = files.createDataset()
