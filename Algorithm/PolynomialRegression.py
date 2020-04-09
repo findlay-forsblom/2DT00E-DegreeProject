@@ -35,11 +35,12 @@ from sklearn.linear_model import LinearRegression
 poly_reg = PolynomialFeatures(degree = 3)
 X_poly = poly_reg.fit_transform(X)
 poly_reg.fit(X_poly, y)
-lin_reg_2 = LinearRegression()
+lin_reg_2 = LinearRegression(n_jobs= -1,fit_intercept= True,normalize= False)
 lin_reg_2.fit(X_poly, y)
 
 y_pred = lin_reg_2.predict(poly_reg.fit_transform(X_test))
 y_pred = np.round(y_pred, 2)
+
 
 sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
@@ -49,3 +50,14 @@ from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = lin_reg_2, X = X_train, y = y_train, cv = 10)
 accuracies.mean()
 accuracies.std()
+
+# Applying Grid Search to find the best model and the best parameters
+from sklearn.model_selection import GridSearchCV
+parameters = [{'fit_intercept': [True, False], 'normalize': [True, False]}]
+grid_search = GridSearchCV(estimator = lin_reg_2,
+                           param_grid = parameters,
+                           cv = 10,
+                           n_jobs = -1)
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_

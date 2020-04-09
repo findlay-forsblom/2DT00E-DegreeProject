@@ -32,7 +32,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, rando
 
 # Fitting Decision Tree Regression to the dataset
 from sklearn.tree import DecisionTreeRegressor
-regressor = DecisionTreeRegressor(random_state = 0)
+regressor = DecisionTreeRegressor(random_state = 0, max_depth = 8)
 regressor.fit(X_train, y_train)
 y_pred = regressor.predict(X_test)
 
@@ -44,3 +44,13 @@ from sklearn.model_selection import cross_val_score
 accuracies = cross_val_score(estimator = regressor, X = X_train, y = y_train, cv = 10)
 accuracies.mean()
 accuracies.std()
+
+from sklearn.model_selection import GridSearchCV
+parameters = {'max_depth':range(3,20)}
+grid_search = GridSearchCV(estimator = regressor,
+                           param_grid = parameters,
+                           cv = 10,
+                           n_jobs = -1)
+grid_search = grid_search.fit(X_train, y_train)
+best_accuracy = grid_search.best_score_
+best_parameters = grid_search.best_params_

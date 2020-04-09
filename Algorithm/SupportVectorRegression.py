@@ -43,18 +43,19 @@ mse = []
 y_test = sc_y.inverse_transform(y_test)
 y_test = y_test.flatten()
 y_train = y_train.flatten()
-regressor = SVR(kernel = 'poly', degree = 10)
+regressor = SVR(kernel = 'poly', degree = 6, )
 regressor.fit(X_train, y_train)
 
 y_pred = regressor.predict(X_test)
 y_pred = sc_y.inverse_transform(y_pred)
 
-polys = list(range(1,7))
+polys = list(range(1,5))
 Cs = np.arange(1,1000, 300)
-epsilons = np.linspace(0,1,11)
+epsilons = np.arange(0,0.5,0.02)
 # Applying Grid Search to find the best model and the best parameters
 from sklearn.model_selection import GridSearchCV
-parameters = [{'kernel': ['poly', 'linear', 'rbf'], 'degree': polys, 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
+parameters = [{'kernel': ['poly'], 'degree': polys, 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons },
+              {'kernel': ['linear', 'rbf'], 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
 grid_search = GridSearchCV(estimator = regressor,
                            param_grid = parameters,
                            cv = 10,
