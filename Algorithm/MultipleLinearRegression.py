@@ -17,15 +17,29 @@ y = dataset.iloc[:, 2].values
 
 
 # Encoding categorical data
+df = pd.DataFrame(data=X, columns=['Snow depth', 'Temp', 'dummy', 'Precipiattion','Humidity'])
+just_dummies = pd.get_dummies(df['dummy'])
+
+df = pd.concat([df, just_dummies], axis=1)
+df.drop(['dummy'], inplace=True, axis=1) 
+
+X = df.iloc[:,].values
+
+# Avoiding the Dummy Variable Trap
+X = X[:, :-1]
+
+"""
+# Encoding categorical data
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import make_column_transformer
 
 preprocessor = make_column_transformer( (OneHotEncoder(),[2]),remainder="passthrough")
 X = preprocessor.fit_transform(X).toarray()
+X.get_feature_names()
 
 # Avoiding the Dummy Variable Trap
-X = X[:, 1:]
-
+X = X[:, :-1]
+"""
 # Splitting the dataset into the Training set and Test set
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, random_state = 101)
@@ -35,6 +49,22 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, rando
 from sklearn.linear_model import LinearRegression
 regressor = LinearRegression(fit_intercept= True,normalize= True)
 regressor.fit(X_train, y_train)
+
+regressor.coef_
+
+import statsmodels.api as sm
+X = np.append(arr = np.ones((X.shape[0],1), dtype=np.float).astype(int), values = X, axis=1)
+X_opt = X[:,]
+X_opt = X_opt.astype(float)
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+
+X_opt = X[:, [0, 1,2,3,4,10,11,13,15,17,18]]
+X_opt = X_opt.astype(float)
+regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit()
+regressor_OLS.summary()
+
+filtered = df.iloc[:, [0, 1,2,3,4,10,11,13,15,17,18]]
 
 # Predicting the Test set results
 y_pred = regressor.predict(X_test)
@@ -58,6 +88,9 @@ best_accuracy = grid_search.best_score_
 best_parameters = grid_search.best_params_
 
 
+import pickle 
+with open('./Models/multipleLinearReg', 'wb') as f:
+    pickle.dump(regressor, f)
 
 """
 sums = (y_pred - y_test) ** 2

@@ -1,0 +1,35 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "2DTOOE Degree Project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "lint": "npx eslint . || exit 0",
+    "lint:fix": "npx eslint . --fix || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/findlay-forsblom/2DT00E-DegreeProject.git"
+  },
+  "author": "Findlay Forsblom (ff222ey)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/findlay-forsblom/2DT00E-DegreeProject/issues"
+  },
+  "homepage": "https://github.com/findlay-forsblom/2DT00E-DegreeProject#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-hbs": "^2.3.3",
+    "express-session": "^1.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3",
+    "snazzy": "^8.0.0",
+    "standard": "^14.3.3"
+  },
+  "nodemonConfig": {
+    "ext": "js,json,hbs,html,css"
+  }
+}
