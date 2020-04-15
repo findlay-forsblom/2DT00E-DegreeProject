@@ -27,7 +27,9 @@
     "express-hbs": "^2.3.3",
     "express-session": "^1.17.0",
     "mongoose": "^5.9.9",
-    "mongoose-unique-validator": "^2.0.3"
+    "mongoose-unique-validator": "^2.0.3",
+    "nodemailer": "^6.4.6",
+    "ttn": "^2.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.3",
