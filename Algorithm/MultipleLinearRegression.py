@@ -8,6 +8,7 @@ Created on Wed Apr  1 14:34:37 2020
 
 import numpy as np
 from readfiles import ReadFiles
+import pandas as pd
 
 files = ReadFiles(['./Datasets/SnowDepth.csv','./Datasets/Airtemperature.csv', './Datasets/Precipitation.csv', './Datasets/FallAmount.csv', './Datasets/humidity.csv' ])
 dataset = files.createDataset()
