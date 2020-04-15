@@ -21,9 +21,12 @@
   },
   "homepage": "https://github.com/findlay-forsblom/2DT00E-DegreeProject#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "express": "^4.17.1",
     "express-hbs": "^2.3.3",
-    "express-session": "^1.17.0"
+    "express-session": "^1.17.0",
+    "mongoose": "^5.9.9",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.3",
