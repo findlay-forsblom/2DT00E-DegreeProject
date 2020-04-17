@@ -9,6 +9,11 @@ dotenv.config({
   path: './.env'
 })
 
+mongoose.connect().catch(error => {
+  console.log(error)
+  process.exit(1)
+})
+
 const port = 8000
 
 const app = express()

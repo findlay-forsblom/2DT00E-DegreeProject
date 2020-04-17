@@ -89,9 +89,14 @@ best_accuracy = grid_search.best_score_
 best_parameters = grid_search.best_params_
 
 
+"""
 import pickle 
 with open('./Models/multipleLinearReg', 'wb') as f:
     pickle.dump(regressor, f)
+"""
+
+from sklearn.externals import joblib
+joblib.dump(regressor,'./Models/multipleLinearRegV2' )
 
 """
 sums = (y_pred - y_test) ** 2
