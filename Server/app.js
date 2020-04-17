@@ -37,6 +37,8 @@ app.use((req, res, next) => {
   next(err)
 })
 
+lol = mdmdm
+
 app.use((err, req, res, next) => {
   if (err.status === 404) {
     res.status(404)
