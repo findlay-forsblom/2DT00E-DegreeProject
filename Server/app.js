@@ -4,10 +4,34 @@ const path = require('path')
 const mongoose = require('./config/mongoose.js')
 const dotenv = require('dotenv')
 const ttn = require('ttn')
+const { spawn } = require('child_process')
+const predictor = require('./libs/predictor.js')
 
 dotenv.config({
   path: './.env'
 })
+const longlatGen = require('./libs/longLatGen.js')
+const lol = longlatGen.gen('Araby Växjö', '35260')
+lol.then(results => {
+  console.log(results)
+  const data = { snow: 0.5, temp: -5, humudity: 80 }
+  const prediction = predictor.predict(data, results)
+})
+
+const pred = [0.1, -0.5, 0.0, 79.06,0,0,0,0,0,0,1,0,0,0,0,0,0,0]
+
+// const python = spawn('python3', ['script.py', pred])
+//  // collect data from script
+//  python.stdout.on('data', function (data) {
+//   console.log('Pipe data from python script ...')
+//   console.log(data)
+//   const dataToSend = data.toString()
+//   console.log(dataToSend)
+//  })
+
+//  python.on('close', (code) => {
+//   console.log(`child process close all stdio with code ${code}`)
+//   })
 
 mongoose.connect().catch(error => {
   console.log(error)
@@ -36,8 +60,6 @@ app.use((req, res, next) => {
   err.status = 404
   next(err)
 })
-
-lol = mdmdm
 
 app.use((err, req, res, next) => {
   if (err.status === 404) {

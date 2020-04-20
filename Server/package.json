@@ -26,8 +26,11 @@
     "express": "^4.17.1",
     "express-hbs": "^2.3.3",
     "express-session": "^1.17.0",
+    "moment": "^2.24.0",
     "mongoose": "^5.9.9",
     "mongoose-unique-validator": "^2.0.3",
+    "node-fetch": "^2.6.0",
+    "node-geocoder": "^3.27.0",
     "nodemailer": "^6.4.6",
     "ttn": "^2.3.3"
   },
