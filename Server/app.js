@@ -14,7 +14,7 @@ const longlatGen = require('./libs/longLatGen.js')
 const lol = longlatGen.gen('Araby Växjö', '35260')
 lol.then(results => {
   console.log(results)
-  const data = { snow: 0.5, temp: -5, humudity: 80 }
+  const data = { snow: 0, temp: -5, humudity: 80 }
   const prediction = predictor.predict(data, results)
 })
 
