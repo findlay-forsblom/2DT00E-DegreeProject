@@ -11,3 +11,4 @@ from joblib import dump, load
 lol = X_test[30]
 lol = np.reshape(lol, (1,-1))
 regressor = load('../Models/multipleLinearRegV2')
+regressor.predict(lol)
