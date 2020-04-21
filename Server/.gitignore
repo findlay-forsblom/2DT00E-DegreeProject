@@ -147,4 +147,6 @@ temp/
 # Ignore all local history of files
 .history
 
+commands.txt
+
 # End of https://www.gitignore.io/api/node,macos,visualstudiocode
