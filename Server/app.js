@@ -18,7 +18,7 @@ lol.then(results => {
   const prediction = predictor.predict(data, results)
 })
 
-const pred = [0.1, -0.5, 0.0, 79.06,0,0,0,0,0,0,1,0,0,0,0,0,0,0]
+const pred = [0.1, -0.5, 0.0, 79.06, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 
 // const python = spawn('python3', ['script.py', pred])
 //  // collect data from script
@@ -54,6 +54,7 @@ app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/', require('./routes/homeRouter.js'))
+app.use('/action', require('./routes/actionRouter.js'))
 
 app.use((req, res, next) => {
   const err = {}
