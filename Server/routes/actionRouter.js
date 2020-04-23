@@ -6,5 +6,6 @@ const router = express.Router()
 router.get('/clear/:id/:date', controller.clear)
 router.get('/close/:id/:date', controller.close)
 router.get('/:id', controller.index)
+router.get('/', controller.index)
 
 module.exports = router
