@@ -3,6 +3,10 @@ const hbs = require('express-hbs')
 const path = require('path')
 const mongoose = require('./config/mongoose.js')
 const dotenv = require('dotenv')
+const session = require('express-session')
+const redis = require('redis')
+const redisClient = redis.createClient()
+const RedisStore = require('connect-redis')(session)
 const ttn = require('ttn')
 const { spawn } = require('child_process')
 const predictor = require('./libs/predictor.js')
@@ -10,28 +14,34 @@ const predictor = require('./libs/predictor.js')
 dotenv.config({
   path: './.env'
 })
+
+
+const app = express()
+
+const sessionStore = new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 })
+
+const sessionOptions = {
+  name: process.env.SESSION_NAME,
+  secret: process.env.SESSION_SECRET,
+  resave: false, // Resave even if a request is not changing the session.
+  saveUninitialized: false, // Don't save a created but not modified session.
+  cookie: {
+    maxAge: 1000 * 60 * 60, // % 1 hours
+    sameSite: 'lax', // change to lax maybe
+    HttpOnly: true
+  },
+  store: sessionStore
+}
+
+app.use(session(sessionOptions))
+
 const longlatGen = require('./libs/longLatGen.js')
-const lol = longlatGen.gen('Araby Växjö', '35260')
-lol.then(results => {
-  console.log(results)
-  const data = { snow: 0, temp: -5, humudity: 80 }
-  const prediction = predictor.predict(data, results)
-})
-
-const pred = [0.1, -0.5, 0.0, 79.06, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
-
-// const python = spawn('python3', ['script.py', pred])
-//  // collect data from script
-//  python.stdout.on('data', function (data) {
-//   console.log('Pipe data from python script ...')
-//   console.log(data)
-//   const dataToSend = data.toString()
-//   console.log(dataToSend)
-//  })
-
-//  python.on('close', (code) => {
-//   console.log(`child process close all stdio with code ${code}`)
-//   })
+// const lol = longlatGen.gen('Araby Växjö', '35260')
+// lol.then(results => {
+//   console.log(results)
+//   const data = { snow: 0, temp: -5, humudity: 80 }
+//   const prediction = predictor.predict(data, results)
+// })
 
 mongoose.connect().catch(error => {
   console.log(error)
@@ -39,8 +49,6 @@ mongoose.connect().catch(error => {
 })
 
 const port = 8000
-
-const app = express()
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -52,6 +60,26 @@ app.engine('hbs', hbs.express4({
 app.set('view engine', 'hbs')
 
 app.use(express.urlencoded({ extended: false }))
+
+app.use((req, res, next) => {
+  // flash messages - survives only a round trip
+  console.log(req.session)
+  if (req.session.flash) {
+    res.locals.flash = req.session.flash
+    delete req.session.flash
+  }
+  if (req.session.userId) {
+    const user = {}
+    const navbar = {}
+    navbar.username = req.session.username
+    navbar.type = req.session.role
+    user.id = req.session.userId
+    res.locals.loggedIn = user
+    res.locals.navBar = navbar
+  }
+
+  next()
+})
 
 app.use('/', require('./routes/homeRouter.js'))
 app.use('/action', require('./routes/actionRouter.js'))
