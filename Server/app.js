@@ -10,15 +10,15 @@ const predictor = require('./libs/predictor.js')
 dotenv.config({
   path: './.env'
 })
-// const longlatGen = require('./libs/longLatGen.js')
-// const lol = longlatGen.gen('Araby Växjö', '35260')
-// lol.then(results => {
-//   console.log(results)
-//   const data = { snow: 0, temp: -5, humudity: 80 }
-//   const prediction = predictor.predict(data, results)
-// })
+const longlatGen = require('./libs/longLatGen.js')
+const lol = longlatGen.gen('Araby Växjö', '35260')
+lol.then(results => {
+  console.log(results)
+  const data = { snow: 0, temp: -5, humudity: 80 }
+  const prediction = predictor.predict(data, results)
+})
 
-// const pred = [0.1, -0.5, 0.0, 79.06, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+const pred = [0.1, -0.5, 0.0, 79.06, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 
 // const python = spawn('python3', ['script.py', pred])
 //  // collect data from script
