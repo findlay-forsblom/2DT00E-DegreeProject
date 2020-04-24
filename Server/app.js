@@ -15,7 +15,6 @@ dotenv.config({
   path: './.env'
 })
 
-
 const app = express()
 
 const sessionStore = new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 })
@@ -35,7 +34,7 @@ const sessionOptions = {
 
 app.use(session(sessionOptions))
 
-const longlatGen = require('./libs/longLatGen.js')
+// const longlatGen = require('./libs/longLatGen.js')
 // const lol = longlatGen.gen('Araby Växjö', '35260')
 // lol.then(results => {
 //   console.log(results)
@@ -50,7 +49,7 @@ mongoose.connect().catch(error => {
 
 const port = 8000
 
-app.use(express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(path.join(__dirname, '/public')))
 
 app.engine('hbs', hbs.express4({
   defaultLayout: path.join(__dirname, 'views', 'layouts', 'default'),
@@ -58,6 +57,11 @@ app.engine('hbs', hbs.express4({
 }))
 
 app.set('view engine', 'hbs')
+
+// Helper to check if strings are equal when rendering view.
+hbs.registerHelper('ifAvailable', function (arg1, arg2, options) {
+  return (arg1 !== arg2) ? options.fn(this) : options.inverse(this)
+})
 
 app.use(express.urlencoded({ extended: false }))
 
