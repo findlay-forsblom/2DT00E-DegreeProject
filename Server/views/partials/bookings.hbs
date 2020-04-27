@@ -1,38 +1,66 @@
-<div class="col-sm-7 ml-3 mr-3 pb-3">
-            <h3 class="pt-3" style="border-bottom: 1px solid lightgray;">{{current.name}}</h3>
-                {{current.today}} <br><br>
-            {{#if bookings}}
-            Bokningar:
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                    <th scope="col">Lag</th>
-                    <th scope="col">Tid</th>
-                    <th scope="col">Kontakt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each bookings}}         
-                    <tr>
-                    <th scope="row">{{name}}</th>
-                    <td>{{time}}</td>
-                    {{#if contact}}
-                    <td>{{contact}}</td>
-                    {{else}}
-                    <td>N/A</td>
-                    {{/if}}
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-            {{/if}}
-            
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#clearPitch">
-            Skotta planen
-            </button>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closePitch">
-            Stäng planen
-            </button>
-            {{!-- <a href="/action/clear/{{current.id}}/{{current.today}}" class="btn btn-warning">Skotta planen</a> --}}
-            {{!-- <a href="/action/close/{{current.id}}/{{current.today}}" class="btn btn-danger">Stäng planen</a> --}}
+<h3 class="pt-3" style="border-bottom: 1px solid lightgray;">{{current.name}}</h3>
+<p>{{current.today}}</p>
+<div class="row">
+    {{#if sensor}}
+    <div class="col ml-3 mr-3 pb-3">
+        <br>
+        <h5 style="border-bottom: 1px solid lightgray;">Mätdata:</h4>
+        <div class="row">
+            <div class="col">
+                <b>Snödjup:</b><br>
+                <b>Temperatur:</b><br>
+                <b>Luftfuktighet:</b>
+            </div>
+            <div class="col">
+                {{sensor.depth}} cm<br>
+                {{sensor.temp}} °C<br>
+                {{sensor.humid}} %
+            </div>
         </div>
+    </div>
+    {{/if}}
+    {{#if predict}}
+    <div class="col ml-3 mr-3 pb-3">
+        <br>
+        <h5 style="border-bottom: 1px solid lightgray;">Förväntat snödjup:</h4>
+        <p>
+            <b>Datum:  </b> {{predict.dateFirst}}<br>
+            <b>Snödjup:</b> {{predict.first}} cm<br>
+            <br>
+            <b>Datum:  </b> {{predict.dateSecond}}<br>
+            <b>Snödjup:</b> {{predict.second}} cm<br>
+        </p>
+    </div>
+    {{/if}}
+</div>
+{{#if bookings}}
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+        <th scope="col">Bokningar</th>
+        <th scope="col">Tid</th>
+        <th scope="col">Kontakt</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each bookings}}         
+        <tr>
+        <th scope="row">{{name}}</th>
+        <td>{{time}}</td>
+        {{#if contact}}
+        <td>{{contact}}</td>
+        {{else}}
+        <td>N/A</td>
+        {{/if}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#clearPitch">
+Skotta planen
+</button>
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closePitch">
+Stäng planen
+</button>
