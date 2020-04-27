@@ -10,7 +10,7 @@ actionController.index = async (req, res, next) => {
   const action = await Action.find({})
 
   // Must create new object from database to be able to render page with information.
-  const context = { actions: arrangeAction(action) }
+  const context = { actions: arrangeAction(action.reverse()) }
 
   // Fetch Action in request and create a new object to access rendering options.
   const current = await Action.findOne({ _id: req.params.id })
