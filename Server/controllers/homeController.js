@@ -41,7 +41,7 @@ homeController.login = async (req, res, next) => {
       req.session.username = user.username
       req.session.role = user.role
       req.session.flash = { type: 'success', text: `Welcome ${user.username}. You have succesfully logged in` }
-      res.redirect('action/test')
+      res.redirect('/action')
     } else {
       req.session.flash = { type: 'danger', text: 'Log in failed. username or password is incorrect' }
       res.redirect('/')
