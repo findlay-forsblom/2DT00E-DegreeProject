@@ -105,6 +105,37 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.sendFile(path.join(__dirname, 'public', 'assets', 'html', '500.html'))
 })
+
+async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch: 50 }, predict = { first: 2.4, second: 1.1 }) {
+  console.log('NEW ACTION')
+  const today = new Date()
+
+  const book = require('./libs/bookings')
+  const data = await book.fetchBookings(today.toDateString(), sensor.pitch)
+  const bookings = book.handleInfo(data.bookings, data.contact)
+
+  console.log(bookings, data)
+  const Action = require('./models/actionModel.js')
+  const days = require('./libs/threeDates').consecutiveDays()
+
+  const action = new Action({
+    id: sensor.pitch,
+    name: data.pitch.name,
+    bookings: JSON.stringify(bookings),
+    today: days.today.toDateString(),
+    oneDay: days.oneDay.toDateString(),
+    twoDays: days.twoDays.toDateString(),
+    sensor: JSON.stringify(sensor),
+    prediction: JSON.stringify(predict)
+  })
+
+  console.log(JSON.parse(action.sensor).temp)
+
+  // await action.save()
+}
+
+// newAction()
+// TTN =>
 // const detections = {}
 
 // Listen for changes on application from TTN.
@@ -140,6 +171,9 @@ app.use((err, req, res, next) => {
 //     console.log(err)
 //   })
 
+// END TTN
+
+// NODEMAILER =>
 // const nodeMailer = require('nodemailer')
 // const transporter = nodeMailer.createTransport({
 //   // pool: 'smtps://ullvante_alf@hotmail.com:annaanna@smtp.live.com /?pool=true',
@@ -174,6 +208,8 @@ app.use((err, req, res, next) => {
 //   }
 //   console.log('EMAIL SENT!:D')
 // })
+
+// END NODEMAILER
 
 app.listen(port, () => console.log('Server running at http://localhost:' + port))
 

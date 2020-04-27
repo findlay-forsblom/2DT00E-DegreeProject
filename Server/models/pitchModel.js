@@ -6,6 +6,5 @@ const pitchSchema = mongoose.Schema({
 })
 
 const Schema = mongoose.model('Pitch', pitchSchema)
-console.log('change')
 
 module.exports = Schema
