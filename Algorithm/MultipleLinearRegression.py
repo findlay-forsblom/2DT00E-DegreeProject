@@ -9,6 +9,7 @@ Created on Wed Apr  1 14:34:37 2020
 import numpy as np
 from readfiles import ReadFiles
 import pandas as pd
+from sklearn.model_selection import cross_val_predict
 
 files = ReadFiles(['./Datasets/SnowDepth.csv','./Datasets/Airtemperature.csv', './Datasets/Precipitation.csv', './Datasets/FallAmount.csv', './Datasets/humidity.csv' ])
 dataset = files.createDataset()
@@ -51,7 +52,24 @@ from sklearn.linear_model import LinearRegression
 regressor = LinearRegression(fit_intercept= True,normalize= True)
 regressor.fit(X_train, y_train)
 
-regressor.coef_
+y_pred = regressor.predict(X_train)
+sums = (y_pred - y_train) ** 2
+sums = (np.sum(sums)) / len(y_pred)
+score = regressor.score(X_train, y_train)
+print(f'Training error {round(sums * (10**3),3) }')
+print(f'Traning Score {round(score,3)} \n')
+
+prediction = cross_val_predict(regressor, X_train, y_train, cv=5)
+sums = (prediction - y_train) ** 2
+sums = (np.sum(sums)) / len(prediction)
+
+
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = regressor, X = X_train, y = y_train, cv = 5)
+accuracies.std()
+
+print(f'Validation error {round(sums * (10**3),3) }')
+print(f'Validation Score {round(accuracies.mean(),3)}')
 
 import statsmodels.api as sm
 X = np.append(arr = np.ones((X.shape[0],1), dtype=np.float).astype(int), values = X, axis=1)
@@ -71,11 +89,6 @@ filtered = df.iloc[:, [0, 1,2,3,4,10,11,13,15,17,18]]
 y_pred = regressor.predict(X_test)
 y_pred = np.round(y_pred, 2)
 
-
-from sklearn.model_selection import cross_val_score
-accuracies = cross_val_score(estimator = regressor, X = X_train, y = y_train, cv = 10)
-accuracies.mean()
-accuracies.std()
 
 # Applying Grid Search to find the best model and the best parameters
 from sklearn.model_selection import GridSearchCV
