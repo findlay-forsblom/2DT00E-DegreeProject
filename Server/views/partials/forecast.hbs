@@ -1,0 +1,36 @@
+        {{#if forecast}}
+        <div class="col rounded border border-secondary ml-3 mr-3 pb-3"> 
+            <h3 class="pt-3">Väderinformation</h3>
+            {{#each forecast}}
+            <div class="row" >
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <p class="pt-3">
+                                <b>{{date}}</b> <br>
+                            </p>
+                            <div class="row">
+                                
+                                <div class="col" style="width: fit-content;">
+                                    Temperatur:<br>
+                                    Luftfuktighet:<br>
+                                    Väderlek:<br>
+                                </div>
+                                    
+                                <div class="col" style="width: fit-content;">
+                                    {{temp}} °C <br>
+                                    {{humid}} %<br>
+                                    {{symb.type_se}}<br>
+                                </div>
+                                <div class="col" style="width: fit-content;">
+                                    <img src="/public/assets/images/weather/{{symb.icon}}" style="max-width: 70px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>     
+                </div>
+            </div>
+            {{/each}}
+            <p style="font-size: 10px;text-align:right;padding: 0;margin: 0;"><i>Source: SMHI</i></p>
+        </div>
+        {{/if}}
