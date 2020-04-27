@@ -1,0 +1,38 @@
+<div class="col-sm-7 ml-3 mr-3 pb-3">
+            <h3 class="pt-3" style="border-bottom: 1px solid lightgray;">{{current.name}}</h3>
+                {{current.today}} <br><br>
+            {{#if bookings}}
+            Bokningar:
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                    <th scope="col">Lag</th>
+                    <th scope="col">Tid</th>
+                    <th scope="col">Kontakt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each bookings}}         
+                    <tr>
+                    <th scope="row">{{name}}</th>
+                    <td>{{time}}</td>
+                    {{#if contact}}
+                    <td>{{contact}}</td>
+                    {{else}}
+                    <td>N/A</td>
+                    {{/if}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{/if}}
+            
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#clearPitch">
+            Skotta planen
+            </button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closePitch">
+            Stäng planen
+            </button>
+            {{!-- <a href="/action/clear/{{current.id}}/{{current.today}}" class="btn btn-warning">Skotta planen</a> --}}
+            {{!-- <a href="/action/close/{{current.id}}/{{current.today}}" class="btn btn-danger">Stäng planen</a> --}}
+        </div>
