@@ -1,19 +1,13 @@
 'use strict'
 
-// const axios = require('axios')
 const forecaster = require('../libs/forecast')
-// const Pitch = require('../models/pitchModel')
 const Action = require('../models/actionModel.js')
-
 const weatherSymb = require('../libs/weatherSymbols')
-
 const actionController = {}
 
 actionController.index = async (req, res, next) => {
   // Fetch Action history
   const action = await Action.find({})
-  // collection.find().sort({datefield: -1}, function(err, cursor){...});
-  // OMman vill sortera efter datum
 
   // Must create new object from database to be able to render page with information.
   const context = { actions: arrangeAction(action) }
