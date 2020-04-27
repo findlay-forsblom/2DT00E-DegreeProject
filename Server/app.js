@@ -50,6 +50,7 @@ mongoose.connect().catch(error => {
 const port = 8000
 
 app.use('/public', express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, '/public')))
 
 app.engine('hbs', hbs.express4({
   defaultLayout: path.join(__dirname, 'views', 'layouts', 'default'),
