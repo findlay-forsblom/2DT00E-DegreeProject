@@ -90,19 +90,22 @@ function getAveragePrecip (data, day) {
 
   arr.forEach(element => {
     const param = element.params.filter(e => e.name === 'pmean' || e.name === 'pcat')
-    const key = param[0].level
+    const key = param[0].values
     if (!(key in dict)) {
       dict[key] = []
     }
     const arr = dict[key]
     arr.push(param[1].values[0])
+    console.log(dict)
   })
 
   for (const i in dict) {
     const val = dict[i]
-    const sum = val.reduce((a, b) => a + b, 0)
-    const avg = (sum / val.length) || 0
-    dict[i] = avg
+    console.log(val)
+    let sum = val.reduce((a, b) => a + b, 0)
+    sum = sum.toFixed(1)
+    // const avg = (sum / val.length) || 0
+    dict[i] = sum
   }
   return dict
 }

@@ -34,13 +34,13 @@ const sessionOptions = {
 
 app.use(session(sessionOptions))
 
-// const longlatGen = require('./libs/longLatGen.js')
-// const lol = longlatGen.gen('Araby Växjö', '35260')
-// lol.then(results => {
-//   console.log(results)
-//   const data = { snow: 0, temp: -5, humudity: 80 }
-//   const prediction = predictor.predict(data, results)
-// })
+const longlatGen = require('./libs/longLatGen.js')
+const lol = longlatGen.gen('Araby Växjö', '35260')
+lol.then(results => {
+  console.log(results)
+  const data = { snow: 1, temp: -5, humudity: 80 }
+  const prediction = predictor.predict(data, results)
+})
 
 mongoose.connect().catch(error => {
   console.log(error)
