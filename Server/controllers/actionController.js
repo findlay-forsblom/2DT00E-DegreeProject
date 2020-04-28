@@ -3,6 +3,7 @@
 const forecaster = require('../libs/forecast')
 const Action = require('../models/actionModel.js')
 const weatherSymb = require('../libs/weatherSymbols')
+const mailer = require('../libs/mailer')
 const actionController = {}
 
 actionController.index = async (req, res, next) => {
@@ -17,10 +18,7 @@ actionController.index = async (req, res, next) => {
 
   // Parameters to pass for rendering
   const currentArr = []
-  let currentContext
-  let bookings
-  let sensor
-  let prediction
+  let currentContext, bookings, sensor, prediction
 
   if (current) {
     currentArr.push(current)
@@ -37,11 +35,13 @@ actionController.index = async (req, res, next) => {
     prediction.dateSecond = currentContext.currentAction[0].twoDays
   }
 
+  // Filter to unique emails to form rendering
+  const emails = bookings.map(booking => { return booking.contact }).filter(onlyUnique)
+
   // Get current dates, filtered forecasts with corresponding symbols.
   const days = require('../libs/threeDates').consecutiveDays()
   const forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
   const forecastSymbols = weatherSymb.getSymbol(forecast)
-  console.log(forecastSymbols)
 
   res.render('action/decision', {
     current: current ? currentContext.currentAction[0] : null,
@@ -49,15 +49,29 @@ actionController.index = async (req, res, next) => {
     bookings: bookings,
     forecast: forecastSymbols,
     sensor: sensor,
-    predict: prediction
+    predict: prediction,
+    emails: emails
   })
 }
 
+/**
+ * Sends emails to all recipients filled in form
+ */
 actionController.clear = async (req, res, next) => {
-  res.send('Clear')
+  if (req.session.role === 'Admin') {
+    mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
+    req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
+  } else {
+    req.session.flash = { type: 'danger', text: `Could not send email to ${req.body.email}` }
+  }
+
+  res.redirect('back')
 }
 
 actionController.close = async (req, res, next) => {
+  console.log(req.body)
+  // mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
+  req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
   res.redirect('back')
 }
 
@@ -100,6 +114,21 @@ function arrangeAction (action) {
       prediction: JSON.parse(act.prediction)
     }
   })
+}
+
+/**
+ * Checks if an array only consists of unique entries. Used in filter function.
+ */
+function onlyUnique (value, index, self) {
+  return self.indexOf(value) === index
+}
+
+/**
+ * Adds the line break tag to each linebreak string occurance.
+ * @param {String} message Message to add HTML line breaks
+ */
+function msgToHTML (message) {
+  return message.split('\r\n').join('<br>')
 }
 
 module.exports = actionController
