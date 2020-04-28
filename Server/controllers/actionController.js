@@ -5,6 +5,7 @@ const Action = require('../models/actionModel.js')
 const weatherSymb = require('../libs/weatherSymbols')
 const mailer = require('../libs/mailer')
 const actionController = {}
+const err = {}
 
 actionController.index = async (req, res, next) => {
   // Fetch Action history
@@ -18,7 +19,7 @@ actionController.index = async (req, res, next) => {
 
   // Parameters to pass for rendering
   const currentArr = []
-  let currentContext, bookings, sensor, prediction
+  let currentContext, bookings, sensor, prediction, emails
 
   if (current) {
     currentArr.push(current)
@@ -33,10 +34,10 @@ actionController.index = async (req, res, next) => {
     // Append missing dates to prediction for rendering.
     prediction.dateFirst = currentContext.currentAction[0].oneDay
     prediction.dateSecond = currentContext.currentAction[0].twoDays
-  }
 
-  // Filter to unique emails to form rendering
-  const emails = bookings.map(booking => { return booking.contact }).filter(onlyUnique)
+    // Filter to unique emails to form rendering
+    emails = bookings.map(booking => { return booking.contact }).filter(onlyUnique)
+  }
 
   // Get current dates, filtered forecasts with corresponding symbols.
   const days = require('../libs/threeDates').consecutiveDays()
@@ -54,10 +55,30 @@ actionController.index = async (req, res, next) => {
   })
 }
 
+actionController.ensureAuthenticated = async (req, res, next) => {
+  if (req.session.userId) {
+    next()
+  } else {
+    req.session.actionId = req.body.id ? req.body.id : req.params.id
+    const redirector = req.session.actionId ? `/${req.params.id}` : '/'
+    res.redirect(redirector)
+  }
+}
+
+actionController.authorize = async (req, res, next) => {
+  const type = req.session.role
+  if (type === 'Admin') {
+    next()
+  } else {
+    err.status = 403
+    next(err)
+  }
+}
+
 /**
  * Sends emails to all recipients filled in form
  */
-actionController.clear = async (req, res, next) => {
+actionController.decision = async (req, res, next) => {
   if (req.session.role === 'Admin') {
     mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
     req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
@@ -65,14 +86,7 @@ actionController.clear = async (req, res, next) => {
     req.session.flash = { type: 'danger', text: `Could not send email to ${req.body.email}` }
   }
 
-  res.redirect('back')
-}
-
-actionController.close = async (req, res, next) => {
-  console.log(req.body)
-  // mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
-  req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
-  res.redirect('back')
+  res.redirect(`/action/${req.body.id}`)
 }
 
 /**

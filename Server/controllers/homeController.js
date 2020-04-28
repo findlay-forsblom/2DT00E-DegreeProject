@@ -5,7 +5,7 @@ const roles = ['User', 'Admin']
 const User = require('../models/user.js')
 
 homeController.index = async (req, res, next) => {
-  res.render('home/home')
+  res.render('home/home', { id: req.params.id })
 }
 
 homeController.register = async (req, res, next) => {
@@ -41,7 +41,12 @@ homeController.login = async (req, res, next) => {
       req.session.username = user.username
       req.session.role = user.role
       req.session.flash = { type: 'success', text: `Welcome ${user.username}. You have succesfully logged in` }
-      res.redirect('/action')
+
+      // If redirected from an actionID without logged in.
+      const redirector = req.session.actionId ? req.session.actionId : ''
+      delete req.session.actionId
+
+      res.redirect(`/action/${redirector}`)
     } else {
       req.session.flash = { type: 'danger', text: 'Log in failed. username or password is incorrect' }
       res.redirect('/')

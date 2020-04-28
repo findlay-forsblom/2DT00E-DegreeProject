@@ -11,11 +11,15 @@ const ttn = require('ttn')
 const { spawn } = require('child_process')
 const predictor = require('./libs/predictor.js')
 
+const siteUrl = 'http://localhost:8000'
+
 dotenv.config({
   path: './.env'
 })
 
 const app = express()
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 const sessionStore = new RedisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 })
 
@@ -86,8 +90,8 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/', require('./routes/homeRouter.js'))
 app.use('/action', require('./routes/actionRouter.js'))
+app.use('/', require('./routes/homeRouter.js'))
 
 app.use((req, res, next) => {
   const err = {}
@@ -132,7 +136,16 @@ async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch:
 
   console.log(JSON.parse(action.sensor).temp)
 
-  // await action.save()
+  const savedAction = await action.save()
+  console.log(savedAction._id, 'SAVED ACTION')
+
+  const mailer = require('./libs/mailer')
+  mailer.sendMail(
+    ['ullvante_alf@hotmail.com'],
+    'Detekterad snö!',
+    `<p>${data.pitch.name} kan behövas att skottas eller stängas. Följ länken nedan för att ta beslut.<br><br> <a href="${siteUrl}/action/${savedAction._id}">Beslut för ${data.pitch.name}</a> <br><br>Mvh, <br> Växjö Kommun.</p>`,
+    `${data.pitch.name} kan behövas att skottas eller stängas. \n\n Gå till hemsidan ${siteUrl}/action/${savedAction._id} för att ta beslut.\n Mvh, \n Växjö Kommun.`
+  )
 }
 
 // newAction()

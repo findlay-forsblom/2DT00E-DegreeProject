@@ -10,7 +10,8 @@
       </div>
       <div class="modal-body">
           {{#if bookings}}
-            <form  method="POST" action="/action/close/" id="close-pitch">
+            <form  method="POST" action="/action/decision/" id="close-pitch">
+            <input type="hidden" name="id" value="{{current._id}}">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Titel</label>
                     <input class="form-control" id="title_input" name="title" aria-describedby="emailHelp" value="{{current.name}} stängd!" form="close-pitch">

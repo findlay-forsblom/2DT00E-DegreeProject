@@ -9,7 +9,8 @@
         </button>
       </div>
       <div class="modal-body">
-            <form method="POST" action="/action/clear/" id="clearance">
+            <form method="POST" action="/action/decision/" id="clearance">
+            <input type="hidden" name="id" value="{{current._id}}">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Titel</label>
                     <input class="form-control" id="title_input" name="title" aria-describedby="emailHelp" value="Skottning av {{current.name}}" form="clearance">
