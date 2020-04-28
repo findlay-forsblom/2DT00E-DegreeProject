@@ -19,6 +19,14 @@ homeController.logout = async (req, res, next) => {
   req.session.cookie.maxAge = 0
 }
 
+homeController.redirectAuthenticated = async (req, res, next) => {
+  if (req.session.userId) {
+    res.redirect('/action')
+  } else {
+    next()
+  }
+}
+
 homeController.login = async (req, res, next) => {
   // Fetch and process request parameters.
   let email = req.body.username
@@ -66,10 +74,6 @@ homeController.registerPost = async (req, res, next) => {
   username = username.charAt(0).toUpperCase() + username.slice(1)
   email = email.trim()
   const match = passwordChecker.check(password, confirmPassword)
-
-  console.log(username)
-  console.log(email)
-  console.log(match)
 
   if (match) {
     try {

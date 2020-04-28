@@ -4,6 +4,7 @@ const forecaster = require('../libs/forecast')
 const Action = require('../models/actionModel.js')
 const weatherSymb = require('../libs/weatherSymbols')
 const actionController = {}
+const err = {}
 
 actionController.index = async (req, res, next) => {
   // Fetch Action history
@@ -51,6 +52,25 @@ actionController.index = async (req, res, next) => {
     sensor: sensor,
     predict: prediction
   })
+}
+
+actionController.ensureAuthenticated = async (req, res, next) => {
+  if (req.session.userId) {
+    next()
+  } else {
+    err.status = 403
+    next(err)
+  }
+}
+
+actionController.authorize = async (req, res, next) => {
+  const type = req.session.role
+  if (type === 'Admin') {
+    next()
+  } else {
+    err.status = 403
+    next(err)
+  }
 }
 
 actionController.clear = async (req, res, next) => {
