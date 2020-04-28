@@ -18,7 +18,6 @@ const mailer = require('./libs/mailer')
  * @param message Text of HTML content.
  */
 module.exports.sendMail = (emails, subject, html, message) => {
-  console.log(process.env.EMAIL, process.env.E_PASS)
   const transporter = nodeMailer.createTransport({
     service: 'gmail',
     secure: false,
@@ -32,7 +31,6 @@ module.exports.sendMail = (emails, subject, html, message) => {
     if (error) {
       console.log(error)
     } else {
-      console.log(emails)
       const mailOptions = {
         from: `"Artificial grass center" <${process.env.EMAIL}>`, // sender address
         to: emails, // list of receivers
@@ -43,16 +41,12 @@ module.exports.sendMail = (emails, subject, html, message) => {
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-          return console.log(error)
+          console.log(error)
         }
-        console.log('EMAIL SENT!:D')
+        console.log('EMAIL SENT!')
       })
     }
   })
-
-  //
-
-//   })
 }
 
 // transporter.verify(function (error, success) {
