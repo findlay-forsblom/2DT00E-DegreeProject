@@ -111,7 +111,7 @@ app.use((err, req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'assets', 'html', '500.html'))
 })
 
-async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch: 50 }, predict = { first: 2.4, second: 1.1 }) {
+async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch: 85 }, predict = { first: 2.4, second: 1.1 }) {
   console.log('NEW ACTION')
   const today = new Date()
 
@@ -126,6 +126,8 @@ async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch:
   const action = new Action({
     id: sensor.pitch,
     name: data.pitch.name,
+    names: data.pitch.mult_names,
+    clearEmail: data.pitch.clear_email,
     bookings: JSON.stringify(bookings),
     today: days.today.toDateString(),
     oneDay: days.oneDay.toDateString(),
@@ -149,6 +151,19 @@ async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch:
 }
 
 // newAction()
+
+async function addPitch () {
+  const Pitch = require('./models/pitchModel.js')
+  const pitch = new Pitch({
+    id: 85,
+    name: 'Värendsvallen Konstgräsplan',
+    mult_id: JSON.stringify([85, 212, 213]),
+    mult_names: JSON.stringify(['Plan C', 'Plan C - Halvplan 1', 'Plan C - Halvplan 2'])
+  })
+  await pitch.save()
+}
+
+// addPitch()
 // TTN =>
 // const detections = {}
 

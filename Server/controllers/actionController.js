@@ -7,6 +7,9 @@ const mailer = require('../libs/mailer')
 const actionController = {}
 const err = {}
 
+// Run development functions if true
+const development = true
+
 actionController.index = async (req, res, next) => {
   // Fetch Action history
   const action = await Action.find({})
@@ -80,7 +83,7 @@ actionController.authorize = async (req, res, next) => {
  */
 actionController.decision = async (req, res, next) => {
   if (req.session.role === 'Admin') {
-    mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
+    mailer.sendMail([development ? process.env.dev_email : process.env.dev_email2], req.body.title, msgToHTML(req.body.message), req.body.message)
     req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
   } else {
     req.session.flash = { type: 'danger', text: `Could not send email to ${req.body.email}` }
@@ -120,6 +123,8 @@ function arrangeAction (action) {
       _id: act._id,
       id: act.id,
       name: act.name,
+      names: JSON.parse(act.names),
+      clearEmail: act.clearEmail,
       bookings: JSON.parse(act.bookings),
       today: act.today,
       oneDay: act.oneDay,

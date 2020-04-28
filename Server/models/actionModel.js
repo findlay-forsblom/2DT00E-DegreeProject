@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const actionSchema = mongoose.Schema({
   id: { type: String, required: true },
   name: { type: String, required: true },
+  names: { type: String },
+  clearEmail: { type: String, required: true },
   bookings: { type: String, required: true },
   today: { type: String, required: true },
   oneDay: { type: String, required: true },
