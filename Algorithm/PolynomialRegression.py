@@ -121,6 +121,23 @@ grid_search = grid_search.fit(X_poly[:,1:], y_train)
 best_mse = grid_search.best_score_
 best_parameters = grid_search.best_params_
 
+ridgeReg = Ridge(fit_intercept = False, normalize = True, alpha = 0.000001, tol ='1e-5,', max_iter = 1000 )
+ridgeReg.fit(X_poly, y_train)
+y_pred = ridgeReg.predict(X_poly)
+sums = (y_pred - y_train) ** 2
+sums = (np.sum(sums)) / len(y_pred)
+score = ridgeReg.score(X_poly, y_train)
+print(f'Training error {round(sums * (10**3),3) }')
+print(f'Traning Score {round(score,3)} \n')
+
+prediction = cross_val_predict(ridgeReg, X_poly, y_train, cv=5)
+sums = (prediction - y_train) ** 2
+sums = (np.sum(sums)) / len(prediction)
+accuracies = cross_val_score(estimator = ridgeReg, X = X_poly, y = y_train, cv = 5)
+
+print(f'Validation error {round(sums * (10**3),3) }')
+print(f'Validation Score {round(accuracies.mean(),3)} \n') 
+
 
 #lin_reg_2.score(poly_reg.fit_transform(X_test), y_test)
 
