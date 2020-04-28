@@ -96,12 +96,10 @@ function getAveragePrecip (data, day) {
     }
     const arr = dict[key]
     arr.push(param[1].values[0])
-    console.log(dict)
   })
 
   for (const i in dict) {
     const val = dict[i]
-    console.log(val)
     let sum = val.reduce((a, b) => a + b, 0)
     sum = sum.toFixed(1)
     // const avg = (sum / val.length) || 0
