@@ -10,18 +10,19 @@
       </div>
       <div class="modal-body">
           {{#if bookings}}
-            <form>
+            <form  method="POST" action="/action/decision/" id="close-pitch">
+            <input type="hidden" name="id" value="{{current._id}}">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Titel</label>
-                    <input class="form-control" id="title_input" aria-describedby="emailHelp" value="{{current.name}} stängd!">
+                    <input class="form-control" id="title_input" name="title" aria-describedby="emailHelp" value="{{current.name}} stängd!" form="close-pitch">
                 </div>
                 <div class="form-group">
                     <label for="contact">Email</label>
-                    <input type="email" class="form-control" id="email" value="{{#each bookings}}{{#ifAvailable contact 'N/A'}}{{contact}}{{#if @last}}{{else}},{{/if}}{{/ifAvailable}} {{/each}}">
+                    <input type="email" class="form-control" name="email" id="email" value="{{#each emails}}{{#ifAvailable this 'N/A'}}{{this}}{{#if @last}}{{else}},{{/if}}{{/ifAvailable}} {{/each}}" form="close-pitch" multiple>
                 </div>
                 <div class="form-group">
                     <label for="message">Meddelande</label>
-                    <textarea class="form-control" id="message" style="height: 200px;">
+                    <textarea class="form-control" id="message" name="message" style="height: 200px;" form="close-pitch">
 Tyvärr måste {{current.name}} stängas ({{current.today}}) på grund av snöbeläggning.
 Vid frågor, ring telefonnummer.
  
@@ -36,7 +37,7 @@ Lasse.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
-        <button type="submit" class="btn btn-primary">Skicka mail</button>
+        <button type="submit" class="btn btn-primary" form="close-pitch">Skicka mail</button>
       </div>
     </div>
   </div>
