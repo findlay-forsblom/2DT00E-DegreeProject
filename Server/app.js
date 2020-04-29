@@ -72,7 +72,6 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use((req, res, next) => {
   // flash messages - survives only a round trip
-  console.log(req.session)
   if (req.session.flash) {
     res.locals.flash = req.session.flash
     delete req.session.flash
@@ -134,10 +133,7 @@ async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 
     prediction: JSON.stringify(predict)
   })
 
-  console.log(JSON.parse(action.sensor).temp)
-
   const savedAction = await action.save()
-  console.log(savedAction._id, 'SAVED ACTION')
 
   const mailer = require('./libs/mailer')
   mailer.sendMail(
@@ -170,16 +166,13 @@ ttn.data(process.env.appID, process.env.accessKey)
   .then((client) => {
     client.on('uplink', async (devID, payload) => {
       const value = payload.payload_fields
-      console.log(value, ': IS THE VALUE!!')
 
       const isAck = value.values.includes('ack')
 
       isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
-      console.log(detections, ' : DETECTIONS')
       if (isAck) {
         // If ack was received => Extract message and delete from object.
         const ack = value.values.substring(3)
-        console.log(ack)
         delete detections[ack]
       } else if (detections[value.values] === undefined) {
         // Send ack to client.
