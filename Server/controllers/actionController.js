@@ -41,11 +41,16 @@ actionController.index = async (req, res, next) => {
     // Filter to unique emails to form rendering
     emails = bookings.map(booking => { return booking.contact }).filter(onlyUnique)
   }
-
   // Get current dates, filtered forecasts with corresponding symbols.
   const days = require('../libs/threeDates').consecutiveDays()
-  const forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
+  let forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
+  forecast = forecast.filter((element) => {
+    // Filter out undefined values
+    return element !== undefined
+  })
   const forecastSymbols = weatherSymb.getSymbol(forecast)
+
+  console.log(days.oneDay.toDateString(), days.twoDays.toDateString(), ' THE DAY')
 
   res.render('action/decision', {
     current: current ? currentContext.currentAction[0] : null,
@@ -103,10 +108,12 @@ async function getForecast (days, time) {
 
   for (let i = 0; i < days.length; i++) {
     const day = days[i].split(' ')
+    day[2] = parseInt(day[2], 10).toString()
     const dayArr = forecast.filter(cast => {
       return cast.date.includes(day[1]) && cast.date.includes(day[2]) &&
       cast.time.includes(time[i][0]) && cast.time.includes(time[i][1])
     })
+
     result.push(dayArr[0])
   }
 

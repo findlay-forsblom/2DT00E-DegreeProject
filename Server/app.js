@@ -111,15 +111,13 @@ app.use((err, req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'assets', 'html', '500.html'))
 })
 
-async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch: 85 }, predict = { first: 2.4, second: 1.1 }) {
-  console.log('NEW ACTION')
+async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 85 }, predict = { first: 2.4, second: 1.1 }) {
   const today = new Date()
 
   const book = require('./libs/bookings')
   const data = await book.fetchBookings(today.toDateString(), sensor.pitch)
   const bookings = book.handleInfo(data.bookings, data.contact)
 
-  console.log(bookings, data)
   const Action = require('./models/actionModel.js')
   const days = require('./libs/threeDates').consecutiveDays()
 
@@ -165,40 +163,43 @@ async function addPitch () {
 
 // addPitch()
 // TTN =>
-// const detections = {}
+const detections = {}
 
 // Listen for changes on application from TTN.
-// ttn.data(process.env.appID, process.env.accessKey)
-//   .then((client) => {
-//     client.on('uplink', async (devID, payload) => {
-//       const value = payload.payload_fields
-//       console.log(value, ': IS THE VALUE!!')
+ttn.data(process.env.appID, process.env.accessKey)
+  .then((client) => {
+    client.on('uplink', async (devID, payload) => {
+      const value = payload.payload_fields
+      console.log(value, ': IS THE VALUE!!')
 
-//       // const isAck = value.includes('ack')
+      const isAck = value.values.includes('ack')
 
-//       // isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
-
-//       // if (isAck) {
-//       //   // If ack was received => Extract message and delete from object.
-//       //   const ack = value.substring(3)
-//       //   delete detections[ack]
-//       // } else if (detections[value] === undefined) {
-//       //   // Notify video server and client through detectedLoRa function
-//       //   console.log('YAAAAY!')
-//       //   // detectedLora(STREAM_SERVER, client, io, payload, detections, value)
-//       // } else if (detections[value]) {
-//       //   // Add counts of detections. If 2 counts found send another ack.
-//       //   detections[value] = detections[value]++
-//       //   if (detections[value] > 2) {
-//       //     client.send(payload.dev_id, [value.substring(value.length - 2)])
-//       //     console.log('Sent new ack to node.')
-//       //   }
-//       // }
-//     })
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
+      isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
+      console.log(detections, ' : DETECTIONS')
+      if (isAck) {
+        // If ack was received => Extract message and delete from object.
+        const ack = value.values.substring(3)
+        console.log(ack)
+        delete detections[ack]
+      } else if (detections[value.values] === undefined) {
+        // Send ack to client.
+        client.send(payload.dev_id, [value.values.substring(value.values.length - 3)])
+        detections[value.values] = 1
+        console.log('Sent ack to node.')
+        newAction(value)
+      } else if (detections[value.values]) {
+        // Add counts of detections. If 2 counts found send another ack.
+        detections[value.valuess] = detections[value.values]++
+        if (detections[value.values] > 2) {
+          client.send(payload.dev_id, [value.values.substring(value.values.length - 3)])
+          console.log('Sent new ack to node.')
+        }
+      }
+    })
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
 // END TTN
 
