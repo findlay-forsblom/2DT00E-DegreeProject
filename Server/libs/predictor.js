@@ -1,8 +1,10 @@
 const fetch = require('node-fetch')
 const moment = require('moment')
 const pipeine = require('../libs/mlPipeline.js')
+const encoder = require('../libs/oneHotEncoding.js')
 
 const test = [0.1, -0.5, 0.0, 79.06, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+
 
 module.exports.predict = async (data, geocode, threshold = 0) => {
   const snowDepth = data.snow
@@ -30,12 +32,29 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
       for (i = 1; i < 3; i++) {
         const day = moment(moment().add(i, 'days')).format('MMMM Do YYYY')
         console.log(day)
-        const temp = getAverageTemp(casts, day).toFixed(1)
-        const humid = getAverageHumid(casts, day).toFixed(1)
+        let temp = getAverageTemp(casts, day).toFixed(1)
+        let humid = getAverageHumid(casts, day).toFixed(1)
+        temp = parseFloat(temp.replace(',', '.'))
+        humid = parseFloat(humid.replace(',', '.'))
         const precip = getAveragePrecip(casts, day)
-        console.log(temp)
-        console.log(humid)
+        // console.log(temp)
+        // console.log(humid)
         console.log(precip)
+        const arr = [snowDepth, temp, humid]
+        // console.log(precip)
+        for (const i in precip) {
+          // console.log(i)
+          let encoded = encoder.encode(i)
+          const value = parseFloat(precip[i].replace(',', '.'))
+          encoded = [value].concat(encoded)
+          encoded = arr.concat(encoded)
+          encoded = encoded.slice(0, 18)
+          let snowDepthDay1 = await pipeine.getData(encoded)
+          snowDepthDay1 = parseFloat(snowDepthDay1)
+          encoded.shift()
+          encoded = [snowDepthDay1].concat(encoded)
+          console.log(snowDepthDay1)
+        }
         /**
          * const snowDepthDay1 = await pipeine.getData(test)
          */
@@ -46,6 +65,10 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     const times = result.map(a => a.time) // Time to check again
     console.log(times)
   }
+}
+
+function DummyVariableEncoder (data) {
+
 }
 
 function checkForSnow (data, day) {
@@ -100,6 +123,8 @@ function getAveragePrecip (data, day) {
 
   for (const i in dict) {
     const val = dict[i]
+    console.log(i)
+    console.log(val)
     let sum = val.reduce((a, b) => a + b, 0)
     sum = sum.toFixed(1)
     // const avg = (sum / val.length) || 0
