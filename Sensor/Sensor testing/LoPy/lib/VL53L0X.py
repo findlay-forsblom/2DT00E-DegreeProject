@@ -17,7 +17,6 @@ from machine import Pin
 import ustruct
 import time
 import lib.palette as palette
-# from lib.sensor_calibration import calibrate
 
 VL53L0X_REG_IDENTIFICATION_MODEL_ID = 0xc0
 VL53L0X_REG_IDENTIFICATION_REVISION_ID = 0xc2
@@ -26,7 +25,7 @@ VL53L0X_REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70
 VL53L0X_REG_SYSRANGE_START = 0x00
 VL53L0X_REG_RESULT_INTERRUPT_STATUS = 0x13
 VL53L0X_REG_RESULT_RANGE_STATUS = 0x14
-sensor = 0x29                                       #I2C Address
+sensor = 0x29       #I2C Address
 
 pycom.heartbeat(False)
 ##RGB Colors

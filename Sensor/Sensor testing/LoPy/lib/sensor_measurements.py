@@ -13,7 +13,7 @@ import time
 def measure(sensor, temp, iter = 200):
     pycom.rgbled(palette.COLOUR_DARKYELLOW)
     sensor_name = sensor.name()
-    print('Starting measurements on', sensor_name, '..')
+    # print('Starting measurements on', sensor_name, '..')
 
     median_list = []
     counter = 0
@@ -25,7 +25,7 @@ def measure(sensor, temp, iter = 200):
             median_list.append(sensor.run_sensor())
 
     median_list.sort()
-
+    print(median_list, ': MEDIANLIST')
     distance = median_list[int(counter/2)]
     median_list.clear()
 
