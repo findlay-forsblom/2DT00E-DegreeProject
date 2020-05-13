@@ -1,0 +1,19 @@
+
+{{#if current}}
+<div class="container" >
+    <div class="row mt-5 mb-2" style="min-height: 300px;">
+        <div class="col-sm-7 ml-3 mr-3 pb-3">
+            {{>bookings}}
+        </div>
+        {{>forecast}}
+    </div>
+</div>
+{{else}}
+<br>
+{{/if}}
+
+{{>actionList}}
+
+<!-- Insert modals -->
+{{>clearance}}
+{{>close}}

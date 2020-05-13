@@ -32,7 +32,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, rando
 from sklearn.neighbors import KNeighborsRegressor
 testks = []
 mse = []
-for k in range(1, 25, 2):
+for k in range(1, 250, 2):
     neigh = KNeighborsRegressor(n_neighbors=k)
     neigh.fit(X_train, y_train)
     

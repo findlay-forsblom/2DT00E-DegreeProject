@@ -1,0 +1,40 @@
+<!-- Modal -->
+<div class="modal fade" id="clearPitch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Skotta {{current.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <form method="POST" action="/action/decision/" id="clearance">
+            <input type="hidden" name="id" value="{{current._id}}">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Titel</label>
+                    <input class="form-control" id="title_input" name="title" aria-describedby="emailHelp" value="Skottning av {{current.name}}" form="clearance">
+                </div>
+                <div class="form-group">
+                    <label for="contact">Email</label>
+                    <input type="email" name="email" class="form-control" id="email" value="{{current.clearEmail}}" form="clearance" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="message">Meddelande</label>
+                    <textarea class="form-control" name="message" id="message" style="height: 200px;" form="clearance">
+{{current.name}} behöver skottas!
+Skicka dit dina mannar omgående!!!!
+ 
+Mvh,
+Växjö Kommun.
+                    </textarea>
+                </div>
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+        <button type="submit" class="btn btn-primary" form="clearance">Skicka mail</button>
+      </div>
+    </div>
+  </div>
+</div>

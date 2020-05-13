@@ -1,0 +1,44 @@
+<!-- Modal -->
+<div class="modal fade" id="closePitch" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Stänga {{current.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          {{#if bookings}}
+            <form  method="POST" action="/action/decision/" id="close-pitch">
+            <input type="hidden" name="id" value="{{current._id}}">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Titel</label>
+                    <input class="form-control" id="title_input" name="title" aria-describedby="emailHelp" value="{{current.name}} stängd!" form="close-pitch">
+                </div>
+                <div class="form-group">
+                    <label for="contact">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" value="{{#each emails}}{{#ifAvailable this 'N/A'}}{{this}}{{#if @last}}{{else}},{{/if}}{{/ifAvailable}} {{/each}}" form="close-pitch" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="message">Meddelande</label>
+                    <textarea class="form-control" id="message" name="message" style="height: 200px;" form="close-pitch">
+Tyvärr måste {{current.name}} stängas ({{current.today}}) på grund av snöbeläggning.
+Vid frågor, ring telefonnummer 07XX-XX XX XX.
+ 
+Mvh,
+Växjö Kommun.
+                    </textarea>
+                </div>
+            </form>
+            {{else}}
+            Inga bokningar hittade!
+            {{/if}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+        <button type="submit" class="btn btn-primary" form="close-pitch">Skicka mail</button>
+      </div>
+    </div>
+  </div>
+</div>

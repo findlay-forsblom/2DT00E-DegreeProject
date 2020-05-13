@@ -13,6 +13,8 @@ import keys
 rtc = RTC()
 rtc.init((2020, 3, 2, 15, 34, 10))
 
+counter = 0
+
 # Number of seconds to hold sensor after ack.
 HOLD_SENSOR = 5
 
@@ -40,11 +42,10 @@ def connect_lora():
         time.sleep(3)
         print('Waiting for connection..')
         connector = connector + 1
-        if(connector > 10):
+        if(connector > 5):
             machine.reset()
 
     print('Connected to gateway.')
-    print('Searching for motion...')
     pycom.rgbled(palette.COLOUR_DARKGREEN)
 
     # create a LoRa socket and make object global for other functions.
@@ -93,31 +94,29 @@ def sendrecv(message = ''):
 
     pycom.rgbled(palette.COLOUR_DARKBLUE)
 
-    # TBC......
-
     # Check for messages received.
-    # for i in range(10):
-    #     ack = recv_msg()
-    #     check_ack = int(message[-2:])
-    #
-    #     # Send ack message to receive downlinks.
-    #     # If ack has been received let server handle itself before new measurements.
-    #     if(ack >= 0 and ack == check_ack):
-    #         pycom.rgbled(palette.COLOUR_WHITE)
-    #         print('Correct ack received from server.')
-    #         send_msg(('ack' + message).encode('utf-8'))
-    #         time.sleep(HOLD_SENSOR)
-    #         print('Searching for motion...')
-    #         break
-    #     else:
-    #         # If no ack received, send message again.
-    #         send_msg(message)
-    #         time.sleep(1)
-    #         pycom.rgbled(palette.COLOUR_RED)
-    #     if(i == 10):
-    #         # Loop again.
-    #         return True
-    #     time.sleep(1)
+    for i in range(10):
+        ack = recv_msg()
+        check_ack = int(message[-3:])
+
+        # Send ack message to receive downlinks.
+        # If ack has been received let server handle itself before new measurements.
+        if(ack >= 0 and ack == check_ack):
+            pycom.rgbled(palette.COLOUR_WHITE)
+            print('Correct ack received from server.')
+            send_msg(('ack' + message).encode('utf-8'))
+            time.sleep(HOLD_SENSOR)
+            print('Ready for sensor..')
+            break
+        else:
+            # If no or wrong ack received, send message again.
+            send_msg(message)
+            time.sleep(1)
+            pycom.rgbled(palette.COLOUR_RED)
+        if(i == 10):
+            # Loop again.
+            return True
+        time.sleep(1)
 
 def joined():
     return lora.has_joined()

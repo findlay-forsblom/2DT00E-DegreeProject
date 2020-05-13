@@ -37,13 +37,14 @@ y = sc_y.fit_transform(np.reshape(y, (-1,1)))
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1/3, random_state = 101)
 
+
 from sklearn.svm import SVR
 polys= []
 mse = []
 y_test = sc_y.inverse_transform(y_test)
 y_test = y_test.flatten()
 y_train = y_train.flatten()
-regressor = SVR(kernel = 'poly', degree = 6, )
+regressor = SVR(kernel = 'rbf')
 regressor.fit(X_train, y_train)
 
 y_pred = regressor.predict(X_test)
@@ -57,7 +58,7 @@ from sklearn.model_selection import GridSearchCV
 parameters = [{'kernel': ['linear', 'rbf'], 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
 grid_search = GridSearchCV(estimator = regressor,
                            param_grid = parameters,
-                           cv = 10,
+                           cv = 5,
                            n_jobs = -1)
 grid_search = grid_search.fit(X_train, y_train)
 best_accuracy = grid_search.best_score_
@@ -84,7 +85,7 @@ posmin = mse.argmin()
 print(f'{polys[posmin]} with the best k')
 
 
-regressor = SVR(kernel = 'poly', degree = 3)
+regressor = SVR(kernel = 'poly', degree = 7, epsilon = 0.2, gamma = 0.5)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)
@@ -94,7 +95,7 @@ sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
 print(sums)
 
-regressor = SVR(kernel = 'rbf')
+regressor = SVR(kernel = 'rbf', epsilon = 1, gamma = 0.08)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)
@@ -104,7 +105,7 @@ sums = (y_pred - y_test) ** 2
 sums = round((np.sum(sums)) / len(y_pred), 6)  
 print(sums)
 
-regressor = SVR(kernel = 'linear')
+regressor = SVR(kernel = 'linear', epsilon = 0.02, gamma = 0.1)
 regressor.fit(X_train, y_train.flatten())
 
 y_pred = regressor.predict(X_test)

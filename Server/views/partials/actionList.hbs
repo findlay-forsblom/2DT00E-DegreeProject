@@ -1,0 +1,26 @@
+<div class="container">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Konstgräsplan</th>
+            <th scope="col">Datum</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}            
+            <tr onclick="window.location='/action/{{_id}}';">
+            <th scope="row">{{@index}}</th>
+            <td>{{name}}</td>
+            <td>{{today}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{#if all}}
+    <a href="?all=false">Göm</a>
+    {{else}}
+    <a href="?all=true">Visa historik</a>
+    {{/if}}
+    <br>
+</div>
