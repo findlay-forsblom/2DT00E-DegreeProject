@@ -36,16 +36,13 @@ svr = SVR()
 X_valid = X_train[:3000,]
 y_valid = y_train[:3000,]
 from sklearn.model_selection import GridSearchCV
-"""
-parameters = [{'kernel': ['sigmoid'], 'C': [0.4, 0.5, 0.7], 
-               'epsilon':[0.1, 0.2, 0.09],
+
+parameters = [{'kernel': ['poly'], 'C': [0.001, 0.01, 0.1, 1], 
+               'epsilon':[0.1, 0.001, 0.01],
                'coef0':[0, 0.5, 1],
                'tol':[1e-5, 1e-1, 1e-8],
-               'gamma': ['scale', 'auto', 0.01, 0.009]}]
-"""
-
-parameters = [{'kernel': ['linear'], 'C': [1, 0.8, 1.2], 
-               'epsilon':[0.01, 0.009, 0.03]}]
+               'gamma': ['scale', 'auto', 0.01, 0.009],
+               'degree':[2,3]}]
 
 grid_search = GridSearchCV(estimator = svr,
                            param_grid = parameters,
