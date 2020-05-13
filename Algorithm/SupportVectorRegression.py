@@ -8,7 +8,6 @@ Created on Mon Apr  6 13:25:18 2020
 
 import numpy as np
 from readfiles import ReadFiles
-import autosklearn.classification
 
 files = ReadFiles(['./Datasets/SnowDepth.csv','./Datasets/Airtemperature.csv', './Datasets/Precipitation.csv', './Datasets/FallAmount.csv', './Datasets/humidity.csv' ])
 dataset = files.createDataset()
@@ -55,8 +54,7 @@ Cs = np.arange(1,1000, 300)
 epsilons = np.arange(0,0.5,0.02)
 # Applying Grid Search to find the best model and the best parameters
 from sklearn.model_selection import GridSearchCV
-parameters = [{'kernel': ['poly'], 'degree': polys, 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons },
-              {'kernel': ['linear', 'rbf'], 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
+parameters = [{'kernel': ['linear', 'rbf'], 'C': Cs, 'epsilon':epsilons, 'gamma': epsilons }]
 grid_search = GridSearchCV(estimator = regressor,
                            param_grid = parameters,
                            cv = 10,
