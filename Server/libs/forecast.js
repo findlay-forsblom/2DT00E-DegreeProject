@@ -6,7 +6,6 @@ async function forecast () {
   const geo = longlatGen.gen('Araby Växjö', '35260')
 
   return geo.then(async (results) => {
-    console.log()
     const lat = (results.lat).toFixed(3)
     const lon = (results.long).toFixed(3)
     const SMHI = `https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${lon}/lat/${lat}/data.json`

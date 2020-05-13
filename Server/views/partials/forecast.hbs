@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col">
                             <p class="pt-3">
-                                <b>{{date}}</b> <br>
+                                <b>{{date}}</b> {{#if @first}}&emsp;&nbsp;&nbsp;(H / L){{/if}}<br>
                             </p>
                             <div class="row">
                                 
@@ -18,8 +18,8 @@
                                 </div>
                                     
                                 <div class="col" style="width: fit-content;">
-                                    {{temp}} °C <br>
-                                    {{humid}} %<br>
+                                    {{highTemp}} / {{lowTemp}} °C<br>
+                                    {{highHumid}} / {{lowHumid}} %<br>
                                     {{symb.type_se}}<br>
                                 </div>
                                 <div class="col" style="width: fit-content;">

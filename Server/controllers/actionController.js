@@ -11,8 +11,8 @@ const err = {}
 const development = true
 
 actionController.index = async (req, res, next) => {
-  // Fetch Action history
-  const action = await Action.find({})
+  // Fetch Action history if query, else fetch only todays actions
+  const action = req.query.all === 'true' ? await Action.find({}) : await Action.find({ today: new Date().toDateString() })
 
   // Must create new object from database to be able to render page with information.
   const context = { actions: arrangeAction(action.reverse()) }
@@ -50,8 +50,6 @@ actionController.index = async (req, res, next) => {
   })
   const forecastSymbols = weatherSymb.getSymbol(forecast)
 
-  console.log(days.oneDay.toDateString(), days.twoDays.toDateString(), ' THE DAY')
-
   res.render('action/decision', {
     current: current ? currentContext.currentAction[0] : null,
     data: context.actions,
@@ -59,7 +57,8 @@ actionController.index = async (req, res, next) => {
     forecast: forecastSymbols,
     sensor: sensor,
     predict: prediction,
-    emails: emails
+    emails: emails,
+    all: req.query.all === 'true' ? true : undefined
   })
 }
 
@@ -102,22 +101,64 @@ actionController.decision = async (req, res, next) => {
  * @param {Array} days Array of dates.
  * @param {Array} time Array of time.
  */
-async function getForecast (days, time) {
+async function getForecast (days) {
   const forecast = await forecaster.forecast()
   const result = []
 
   for (let i = 0; i < days.length; i++) {
     const day = days[i].split(' ')
     day[2] = parseInt(day[2], 10).toString()
+
     const dayArr = forecast.filter(cast => {
-      return cast.date.includes(day[1]) && cast.date.includes(day[2]) &&
-      cast.time.includes(time[i][0]) && cast.time.includes(time[i][1])
+      return cast.date.includes(day[1]) && cast.date.includes(day[2])
     })
 
-    result.push(dayArr[0])
+    // Initialize the return object
+    const weather = {
+      date: dayArr[0].date,
+      lowTemp: dayArr[0].params[0].values[0],
+      highTemp: dayArr[0].params[0].values[0],
+      lowHumid: dayArr[0].params[1].values[0],
+      highHumid: dayArr[0].params[1].values[0],
+      symbol: []
+    }
+
+    // Find lowest/highest temp/humidity and add weather symbols.
+    dayArr.forEach((item, idx) => {
+      const temp = item.params[0].values[0]
+      const humid = item.params[1].values[0]
+      if (temp < weather.lowTemp) {
+        weather.lowTemp = temp
+      } else if (temp > weather.highTemp) {
+        weather.highTemp = temp
+      }
+
+      if (humid < weather.lowHumid) {
+        weather.lowHumid = humid
+      } else if (humid > weather.highHumid) {
+        weather.highHumid = humid
+      }
+
+      weather.symbol.push(item.params[4].values[0])
+    })
+
+    // Find most common weather symbol and push to result
+    weather.commonSymbol = mode(weather.symbol)
+    result.push(weather)
   }
 
   return result
+}
+
+/**
+ * Finds the most common element in an array.
+ * @param {Array} arr Array
+ */
+function mode (arr) {
+  return arr.sort((a, b) =>
+    arr.filter(v => v === a).length -
+      arr.filter(v => v === b).length
+  ).pop()
 }
 
 /**
@@ -214,7 +255,7 @@ module.exports = actionController
 
 //   // Print out the unique bookings.
 //   bookings.forEach(booking => {
-//     console.log(booking.start + '-' + booking.end + '. Team: ' + booking.description.replace('<br><br>', ' ') + '. Status: ' + booking.status)
+//      .log(booking.start + '-' + booking.end + '. Team: ' + booking.description.replace('<br><br>', ' ') + '. Status: ' + booking.status)
 //   })
 
 //   const teams = bookings.map(booking => booking.description.replace('<br><br>', ' ').split(' '))
