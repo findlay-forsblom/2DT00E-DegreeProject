@@ -73,4 +73,44 @@ ax.set_xlabel('Model Complexity (Degree)')
 ax.set_ylabel('Mean Squared Error')
 ax.legend()
 ax.set_title('The bias variance trade off')
-plt.show()
+plt.savefig('./images/bias.pdf')
+
+
+from sklearn.linear_model import Ridge
+poly_reg = PolynomialFeatures(degree=2)
+X_poly = poly_reg.fit_transform(X_train)
+poly_reg.fit(X_poly, y_train)
+
+ridgeReg = Ridge(fit_intercept = False, normalize = True)
+from sklearn.model_selection import GridSearchCV
+parameters = [{'alpha': [0.01, 0.03, 0.009], 
+               'max_iter': [1000, 5000, 10000],
+              'tol': [1e-5, 1e-8, 2e-8]}]
+
+grid_search = GridSearchCV(estimator = ridgeReg,
+                           param_grid = parameters,
+                           cv = 5,
+                           scoring = 'neg_mean_squared_error',
+                           n_jobs = -1,
+                           verbose = 1)
+grid_search = grid_search.fit(X_poly[:,1:], y_train)
+best_mse = grid_search.best_score_
+best_parameters = grid_search.best_params_
+
+ridgeReg = Ridge(fit_intercept = False, normalize = True, alpha = 0.01, tol =1e-5,
+                 max_iter = 13000, solver = 'auto' )
+ridgeReg.fit(X_poly, y_train)
+y_pred = ridgeReg.predict(X_poly)
+sums = (y_pred - y_train) ** 2
+sums = (np.sum(sums)) / len(y_pred)
+score = ridgeReg.score(X_poly, y_train)
+print(f'Training error {round(sums * (10**3),3) }')
+print(f'Traning Score {round(score,3)} \n')
+
+prediction = cross_val_predict(ridgeReg, X_poly, y_train, cv=5)
+sums = (prediction - y_train) ** 2
+sums = (np.sum(sums)) / len(prediction)
+accuracies = cross_val_score(estimator = ridgeReg, X = X_poly, y = y_train, cv = 5)
+
+print(f'Validation error {round(sums * (10**3),3) }')
+print(f'Validation Score {round(accuracies.mean(),3)} \n') 

@@ -51,6 +51,8 @@ lol = list([snowdepth, airtemp, typeofFall, fallAmount])
 
 (snowdepth, airtemp, typeofFall, fallAmount) = removeDuplicates(lol)
 
+typeofFall.shape
+
 col = snowdepth['Snow Depth']
 col.drop(col.head(1).index,inplace=True)
 col= col.append(pd.Series([6]), ignore_index=True)
@@ -86,8 +88,11 @@ df = grouped.sum()
 dfs = [df_final, df]
 df_final = reduce(lambda left,right: pd.merge(left,right,on='Date', how='left'), dfs)
 
-df_final.dropna(inplace=True)
-
 columns = list(just_dummies.columns)
+
+# df_final.dropna(inplace=True)
+for column in columns:
+    print(column)
+    df_final[column] = df_final[column].fillna(value=0) 
 
 df1 = pd.DataFrame(typeofFall['Date'], columns=['a', 'b', 'c', 'd'])

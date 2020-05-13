@@ -90,9 +90,12 @@ class ReadFiles:
     grouped = df.groupby('Date')
     df = grouped.sum()
     
+    columns = list(just_dummies.columns)
+    
     dfs = [df_final, df]
     df_final = reduce(lambda left,right: pd.merge(left,right,on='Date', how='left'), dfs)
 
-    df_final.dropna(inplace=True)
+    for column in columns:
+        df_final[column] = df_final[column].fillna(value=0) 
     
     return df_final
