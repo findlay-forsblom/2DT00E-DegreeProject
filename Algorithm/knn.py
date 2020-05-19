@@ -33,7 +33,7 @@ from sklearn.neighbors import KNeighborsRegressor
 neigh = KNeighborsRegressor()
 
 from sklearn.model_selection import GridSearchCV
-parameters = [{'n_neighbors': [50, 60, 70]}]
+parameters = [{'n_neighbors': [10, 60, 70]}]
 
 grid_search = GridSearchCV(estimator = neigh,
                            param_grid = parameters,

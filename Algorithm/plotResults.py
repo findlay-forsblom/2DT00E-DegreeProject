@@ -10,14 +10,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-trainingError = np.array([0.400, 0.264, 0.149, 0.412, 0.247, 0.228, 0.437, 0.074, 0.045]) * 10 **(-3)
-validationError = np.array([0.488, 0.351, 7.786, 0.415, 0.290, 0.340, 0.433, 0.400, 0.269]) * 10 **(-3)
-index = ['linear Reg', 'poly-reg Deg 2', 'poly-reg Deg 3',
-         'SVR(linear kernel)', 'SVR(Poly kernel)','SVR(rbf kernel)', 'SVR(Sigmoid kernel)', 'DT', 'RF']
+trainingError = np.array([0.288, 0.208, 0.140, 0.208, 0.312, 0.226, 0.225, 0.927, 0.171, 0.077]) * 10 **(-3)
+validationError = np.array([0.291, 0.240, 0.430, 0.239, 0.313, 0.249, 0.265, 0.769, 0.297, 0.191]) * 10 **(-3)
+index = ['linear Reg', 'poly-reg Deg 2', 'poly-reg Deg 3','poly-reg Deg 2 ridge',
+         'SVR(linear kernel)', 'SVR(Poly kernel)','SVR(rbf kernel)', 'SVR(Sig kernel)', 'DT', 'RF']
 df = pd.DataFrame({'traning error': trainingError,
                    'validation error': validationError}, index=index)
 ax = df.plot.bar(rot=0)
-plt.xticks(fontsize=7, rotation=40)
+plt.xticks(fontsize=6.1, rotation=60)
 plt.xlabel('Machine Learning algorithms')
 plt.ylabel('MSE')
 plt.tight_layout()

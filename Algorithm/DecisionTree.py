@@ -27,18 +27,19 @@ from sklearn.tree import DecisionTreeRegressor
 dt = DecisionTreeRegressor(random_state=0)
 
 from sklearn.model_selection import GridSearchCV
-parameters = {'max_depth':[7, 6, 9],
+parameters = {'max_depth':[10, 6, 20],
               'max_features':['sqrt','auto', 'log2', None, 2, 500, 100]}
 grid_search = GridSearchCV(estimator = dt,
                            param_grid = parameters,
                            cv = 5,
                            n_jobs = -1,
-                           verbose = 1)
+                           verbose = 1,
+                           scoring = 'neg_mean_squared_error' )
 grid_search = grid_search.fit(X_train, y_train)
 best_accuracy = grid_search.best_score_
 best_parameters = grid_search.best_params_
 
-dt = DecisionTreeRegressor(random_state=0, max_features = 'auto', max_depth =9 )
+dt = DecisionTreeRegressor(random_state=0, max_features = 'auto', max_depth =6 )
 dt.fit(X_train, y_train)
 y_pred = dt.predict(X_train)
 score = dt.score(X_train, y_train) 
