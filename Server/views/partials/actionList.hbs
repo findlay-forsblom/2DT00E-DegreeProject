@@ -17,4 +17,10 @@
             {{/each}}
         </tbody>
     </table>
+    {{#if all}}
+    <a href="?all=false">Göm</a>
+    {{else}}
+    <a href="?all=true">Visa historik</a>
+    {{/if}}
+    <br>
 </div>

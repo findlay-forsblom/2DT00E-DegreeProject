@@ -19,7 +19,14 @@ async function fetchBookings (date, pitchID) {
   const toDate = fromDate
   const pitch = await Pitch.findOne({ id: pitchID })
 
-  const url = `https://vaxjo.ibgo.se/BookingApi/GetBookings?start=${fromDate}+00%3A00&end=${toDate}+00%3A00&isPublic=true&resources%5B0%5D=${pitchID}`
+  let url = `https://vaxjo.ibgo.se/BookingApi/GetBookings?start=${fromDate}+00%3A00&end=${toDate}+00%3A00&isPublic=true`
+  if (pitch.mult_id) {
+    JSON.parse(pitch.mult_id).forEach((id, idx) => {
+      url = url + `&resources%5B${idx}%5D=${id}`
+    })
+  } else {
+    url = url + `&resources%5B0%5D=${pitchID}`
+  }
 
   const bookings = await requestBookings(url)
 
@@ -40,16 +47,24 @@ async function fetchBookings (date, pitchID) {
   const contacts = []
 
   for (let i = 0; i < teamNames.length; i++) {
-    const contact = await getContact(teamNames[i][0])
+    let contact = ''
+    if (teamNames[i][0].length > 2) {
+      // Remove empty booking names
+      contact = await getContact(teamNames[i][0])
+    }
 
     if (contact.length > 0) {
+      // If contact available
       contact.forEach(team => {
         contacts.push({ name: team.Name, contact: team.Email })
       })
     } else {
+      // No contact available
       contacts.push({ name: teamNames[i][0], contact: 'N/A' })
     }
   }
+
+  console.log(bookings, ' BOOKINGS')
 
   return { pitch: pitch, bookings: bookings, contact: contacts }
 }

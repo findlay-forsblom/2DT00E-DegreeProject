@@ -1,8 +1,15 @@
+'''
+Reads relative humidity and temperature with the RHT03 sensor.
+
+@author Lars Petter Ulvatne, Linnaeus University.
+'''
+
 from pycom import pulses_get
 from time import sleep_ms
 import time
 from machine import Pin
 
+# For fast conversion of half byte decimal values.
 half_byte = {
     "0000": 0,
     "0001": 1,
@@ -22,7 +29,7 @@ half_byte = {
     "1111": 15
 }
 
-#
+# For fast conversion of half byte into order of half byte.
 byte_value = [4096,256,16,1]
 
 '''
@@ -53,11 +60,17 @@ def divide_bytes(byte_str):
     low = half_byte[byte_str[4:]]
     return (high, low)
 
+'''
+Checks pulsewidth of each high pulse, which will describe each state of bit:
+    0: 18 <= pulsewidth <= 28
+    1: 65 <= pulsewidth <= 75
+Adds to a string, and appends string to array each 8 bits.
+'''
 def extract_bytes(data):
     byte_str = ''
     byte_arr = []
 
-    for i in range(1, 81):
+    for i in range(1, len(data) + 1):
         bit = data[i - 1]
         if(bit[0] == 1):
             if(18 <= bit[1] <= 28):
@@ -70,37 +83,58 @@ def extract_bytes(data):
 
     return byte_arr
 
-def get_humidity(byte_arr):
-    return (calc_bytes(byte_arr[0], 'high'), calc_bytes(byte_arr[1], 'low'))
+'''
+Fetches the pulses from pin in open-drain mode.
+'''
+def get_pulses():
+    data = [(0,0)]
+    cnt = 0
+    tester = True
+    pulses = 100
 
-def get_temperature(byte_arr):
-    if(byte_arr[0][0] != '1'):
-        return (calc_bytes(byte_arr[0], 'high'), calc_bytes(byte_arr[1], 'low'))
-    else:
-        return (-1*calc_bytes(byte_arr[0], 'high'), calc_bytes(byte_arr[1], 'low'))
+    while(tester):
+        pin = Pin('P21', mode=Pin.OPEN_DRAIN)
+        pin(0)
+        sleep_ms(20)
+        pin(1)
 
+        data = pulses_get(pin, pulses)         # Fetches all pulses > 100ms
+        tester = not (data[0][0] == 1 and len(data) == 80)
+    return data
+
+'''
+Fetch relative humidity and temperature with the RHT03 sensor.
+'''
 def run_sensor():
-    pin = Pin('P21', mode=Pin.OPEN_DRAIN)
-    print(pin)
+    negative = False
 
-    pin(0)
-    sleep_ms(20)
-    pin(1)
-    data = pulses_get(pin, 100)         # Fetches all pulses > 100ms
+    data = get_pulses()
     time.sleep(0.2)
 
+    # 40 bits data (1) and 40 bit pause (0)
     if(len(data) == 80):
         byte_arr = extract_bytes(data)      # Extract bytes from fetched pulses.
 
-        humid = get_humidity(byte_arr[:2])
-        temp = get_temperature(byte_arr[2:4])
+        humid = (calc_bytes(byte_arr[0], 'high'), calc_bytes(byte_arr[1], 'low'))
+        temp = (calc_bytes(byte_arr[2], 'high'), calc_bytes(byte_arr[3], 'low'))
         check_sum = calc_bytes(byte_arr[4])[0]
+
+        # Fix decimal value if below 0 degrees.
+        if(temp[0][0] >= 32768):
+            temp = ((temp[0][0] - 32768, temp[0][1]), temp[1])
+            negative = True
+
         hum_temp_sum = (humid[0][1] + humid[1][1] + temp[0][1] + temp[1][1]) % 256
 
         if(hum_temp_sum == check_sum):
-            return ((humid[0][0] + humid[1][0])/10, (temp[0][0] + temp[1][0])/10)
+            humidity = (humid[0][0] + humid[1][0])/10
+            temperature = (temp[0][0] + temp[1][0])/10
+
+            if(negative):
+                temperature = -1*temperature
+
+            return (humidity, temperature)
         else:
             raise ValueError('Checksum error.')
     else:
-        print('NOT 80 BITS!!!!!!')
         raise ValueError('Wrong sensor output.')
