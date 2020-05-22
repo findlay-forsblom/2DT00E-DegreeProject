@@ -41,7 +41,7 @@
     "handlebars": "^4.7.6",
     "nodemon": "^2.0.3",
     "snazzy": "^8.0.0",
-    "standard": "^14.3.3"
+    "standard": "^14.3.4"
   },
   "nodemonConfig": {
     "ext": "js,json,hbs,html,css"

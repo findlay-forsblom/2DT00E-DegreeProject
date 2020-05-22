@@ -65,7 +65,7 @@ validationErrors = np.array(validationErrors)
 pos = validationErrors.argmin()
 
 #printing results for tranning error and validation erro
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(4, 5), dpi=80)
 ax.plot(list(range(1,4)), traningErrors, '-', label='training data')
 ax.plot(list(range(1,4)), validationErrors, '-', label='validation data')
 ax.axvline(x=list(range(1,4))[pos], linestyle = '--', label = 'best fit')
@@ -73,7 +73,7 @@ ax.set_xlabel('Model Complexity (Degree)')
 ax.set_ylabel('Mean Squared Error')
 ax.legend()
 ax.set_title('The bias variance trade off')
-plt.savefig('./images/bias.pdf')
+plt.savefig('./images/bias3.pdf')
 
 
 from sklearn.linear_model import Ridge

@@ -30,3 +30,68 @@ df = pd.DataFrame({'traningError': trainingScore,
 ax = df.plot.bar(rot=0)
 plt.xticks(fontsize=7, rotation=40)
 plt.tight_layout()
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import svm
+from sklearn.datasets import make_blobs
+
+
+# we create 40 separable points
+X, y = make_blobs(n_samples=40, centers=2, random_state=6)
+
+# fit the model, don't regularize for illustration purposes
+clf = svm.SVC(kernel='linear', C=1000)
+clf.fit(X, y)
+
+classes = ['Class A', 'Class B']
+
+
+
+
+
+
+fig, ax = plt.subplots()
+cdict = {0: '#ADD8E6', 1: '#b5651d'}
+type = {0: 'Class A', 1:'Class B'}
+for g in np.unique(y):
+    ix = np.where(y == g)
+    ax.scatter(X[ix,0], X[ix,1], c = cdict[g], label = type[g] )
+ax.legend()
+
+
+
+
+
+#plt.scatter(X[:, 0], X[:, 1], c=y, s=30, cmap=plt.cm.Paired, label = classes)
+#plt.legend()
+
+# plot the decision function
+ax = plt.gca()
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+
+# create grid to evaluate model
+xx = np.linspace(xlim[0], xlim[1], 30)
+yy = np.linspace(ylim[0], ylim[1], 30)
+YY, XX = np.meshgrid(yy, xx)
+xy = np.vstack([XX.ravel(), YY.ravel()]).T
+Z = clf.decision_function(xy).reshape(XX.shape)
+
+# plot decision boundary and margins
+ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5,
+           linestyles=['--', '-', '--'])
+# plot support vectors
+ax.scatter(clf.support_vectors_[:, 0], clf.support_vectors_[:, 1], s=100,
+           linewidth=1, facecolors='none', edgecolors='k')
+
+plt.axis('off')
+plt.savefig("./images/SVMClassifier.pdf") 
+
+clf.support_vectors_

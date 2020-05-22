@@ -31,12 +31,17 @@ regressor = RandomForestRegressor(random_state = 0, warm_start = True, n_estimat
                                   max_samples = 0.5,
                                   min_impurity_split = 4e-06)
 
-visualizer = ResidualsPlot(regressor)
+visualizer = ResidualsPlot(regressor, hist=False)
 visualizer.fit(X_train, y_train)  # Fit the training data to the visualizer
 visualizer.score(X_test, y_test)  # Evaluate the model on the test data
-visualizer.show()   
+fig = visualizer.fig
+visualizer.show() 
+fig.savefig("./images/residuals.pdf") 
 
 visualizer = PredictionError(regressor) 
 visualizer.fit(X_train, y_train)  # Fit the training data to the visualizer
-visualizer.score(X_test, y_test)  # Evaluate the model on the test data
+visualizer.score(X_test, y_test) 
+fig = visualizer.fig # Evaluate the model on the test data
 visualizer.show()  
+fig.savefig("./images/PredictionError.pdf") 
+
