@@ -52,8 +52,6 @@ def run_sensor(temp):
     # MCP9700A temperature sensor
     # T_A = temp.readTemp(analog_pin)
 
-    # RHT03 humidity/temperature sensor
-    # humid, T_A = RHT.run_sensor(analog_pin)
     if(isinstance(temp, str) == False):
         speed_sound = (331.4 + 0.6 * temp) * 0.0001        # cm/us
     else:

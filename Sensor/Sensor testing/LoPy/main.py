@@ -26,11 +26,14 @@ import lib.HC_SR04 as HC_SR04
 # import lib.VL53L0X as VL53L0X
 import lib.RHT03 as RHT03
 
-pitch_id = 38                       # ID for Fagrabaeckkonstgraesplan
+# PitchID. Id for the IBGO ID for the device at a specific pitch.
+# Should only be one number. This is for testing the application.
+pitch_id = [173, 38, 85, 50, 158 ]
+
 COLOUR_BLACK = 0x000000
 COLOUR_GREEN = 0x00FF00
 COLOUR_BLUE  = 0x0000FF
-pycom.heartbeat(False)              # disable the blue blinking
+pycom.heartbeat(False)              # disable the blue light
 
 '''
 Sensor names:
@@ -45,6 +48,7 @@ counter = 1
 temp = -0.1
 humid = 80.1
 snow_depth = 3.2
+calibrated_distance = 0
 demo = True
 
 def humid_temp():
@@ -54,9 +58,10 @@ def humid_temp():
         return ('Checksum error', 'Checksum error')
 
 # Calibrate sensor
-humid, temp = humid_temp()
-calibrated_distance = measurements.measure(sensor, temp, iter)
-print(calibrated_distance, ': Calibrated')
+if(not demo):
+    humid, temp = humid_temp()
+    calibrated_distance = measurements.measure(sensor, temp, iter)
+    print(calibrated_distance, ': Calibrated')
 time.sleep(2)
 
 while(True):
@@ -70,24 +75,24 @@ while(True):
                 print('Humidity: ', humid, '%')
                 print('Temperature: ', temp, '°C')
 
-            print('Reading depth...')
-            pycom.rgbled(palette.COLOUR_DARKGREEN)
+                print('Reading depth...')
+                pycom.rgbled(palette.COLOUR_DARKGREEN)
 
-            distance = measurements.measure(sensor, temp, iter)
-            snow_depth = calibrated_distance - distance
-
+                distance = measurements.measure(sensor, temp, iter)
+                snow_depth = calibrated_distance - distance
             ack_id = cnt.count(counter)
 
             if(snow_depth > 2):
-                message = '{0},{1},{2},{3},{4}'.format(temp, humid, snow_depth, pitch_id, ack_id)
+                message = '{0},{1},{2},{3},{4}'.format(temp, humid, snow_depth, pitch_id[counter], ack_id)
                 LoPy.sendrecv(message)
                 counter = counter + 1
                 if(counter == 100):
                     counter = 1
                 time.sleep(60)
 
-            print('Going into deep sleep..')
-            machine.deepsleep(10000)
+            if(not demo):
+                print('Going into deep sleep..')
+                machine.deepsleep(60000*60*12)
         else:
             print('Connecting to gateway..')
             LoPy.connect_lora()
