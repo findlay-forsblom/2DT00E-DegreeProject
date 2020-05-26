@@ -7,4 +7,5 @@ The data transfer method was LoRa and was only setup to the LoPy4 device, to sen
 ## HC-SR04
 The pin connections to both microcontrollers can be viewed in the image below.
 
-![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/hc_sr04.jpg | width=50)
+![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/hc_sr04.jpg)
+<img src="/Sensor/img/hc_sr04.jpg" raw=true alt="Hiho" style="max-width=50%;" />
