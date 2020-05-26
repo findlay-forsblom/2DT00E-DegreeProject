@@ -17,9 +17,9 @@ The [Arduino Uno code](/Sensor/Sensor%20testing/Arduino) and [LoPy4 code](/Senso
 ## GP2Y0A21YK0F IR sensor
 The [Arduino Uno code](/Sensor/Sensor%20testing/Arduino) and [LoPy4 code](/Sensor/Sensor%20testing/LoPy/lib) can be found in the separate maps in Sensor testing. Link to [GP2Y0A21YK0F datasheet](https://global.sharp/products/device/lineup/data/pdf/datasheet/gp2y0a21yk_e.pdf). The Arduino library for this sensor was provided by [Benne de Bakker](https://www.makerguides.com/sharp-gp2y0a21yk0f-ir-distance-sensor-arduino-tutorial/) in the step-by-step tutorial for this sensor. This sensor was not used with the LoPy4 device. The pin connections for the Arduino can be viewed in the image below. A 10 µF capacitor was connected between 5V and GND for stabilization. 
 
-![Pin connections to the Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/GP2Y0A21YK0F.jpg)
+![Pin connections to the Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/GP2Y0A21YK0F.png)
 
 ## RHT03 relative humidity and temperature sensor
 The [Arduino Uno code](/Sensor/Sensor%20testing/Arduino) and [LoPy4 code](/Sensor/Sensor%20testing/LoPy/lib) can be found in the separate maps in Sensor testing. Link to [RHT03 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/Weather/RHT03.pdf). The Arduino library for this sensor was provided by Sparkfun Electronics at the Github repository [SparkFun_RHT03_Arduino_Library](https://github.com/sparkfun/SparkFun_RHT03_Arduino_Library/). The LoPy4 library was written by the information provided in the datasheet. The pin connections to both microcontrollers can be viewed in the image below.
 
-![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/RHT03.jpg)
+![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/RHT03.jpg)x
