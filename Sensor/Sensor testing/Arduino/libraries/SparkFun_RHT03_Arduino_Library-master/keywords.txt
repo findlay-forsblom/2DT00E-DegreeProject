@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #######################################
 # Syntax Coloring Map For RHT03
 #######################################
@@ -30,4 +31,38 @@ humidity	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
+=======
+#######################################
+# Syntax Coloring Map For RHT03
+#######################################
+
+#######################################
+# Library (KEYWORD1)
+#######################################
+
+RHT03	KEYWORD1	
+SparkFunRHT03	KEYWORD1
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#Nothing here yet
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+begin	KEYWORD2
+update	KEYWORD2
+tempC	KEYWORD2
+tempF	KEYWORD2
+humidity	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+>>>>>>> Lasse
 RHT_READ_INTERVAL_MS	LITERAL1

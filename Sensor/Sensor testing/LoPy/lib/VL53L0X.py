@@ -77,7 +77,6 @@ def run_sensor():
     counter = 0
     value = 0
 
-    #print("Start Measurement")
     i2c_w(VL53L0X_REG_SYSRANGE_START, 0x02)
 
     while (counter < 100):
