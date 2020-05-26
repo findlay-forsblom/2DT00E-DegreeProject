@@ -9,3 +9,10 @@ To restrict the number of snow clearances, Växjö county decided to close the p
 Flowchart of the project process.
 
 ## Machine learning algorithm
+Text about the ML algorithm
+
+## IoT device
+The IoT device should handle the snow depth, relative humidity and temperature measurements and send the data via LoRaWAN to the web application server. This was done via The Things Network, which made the data available to the application connected to the server. The sensors techniques tested was ultrasonic, micro LIDAR, IR and a relative humidity and temperature sensor. More in depth information can be found in the [Sensor folder](/Sensor).
+
+## Web application
+The web application was written in JavaScript with Node.js. The framework used was Express.js, along with numerous modules to build up functionality. The information was dispersed through email, using the nodemailer module. A more in depth explanation of the web application can be found in the [Server folder](/Server).
