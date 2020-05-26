@@ -42,6 +42,7 @@ app.use(session(sessionOptions))
 // const lol = longlatGen.gen('Araby Växjö', '35260')
 // lol.then(results => {
 //   console.log(results)
+// hiho
 //   const data = { snow: 0, temp: -5, humudity: 80 }
 //   const prediction = predictor.predict(data, results)
 // })
