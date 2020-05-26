@@ -4,7 +4,7 @@ This thesis project was assigned by dizparc on behalv of Växjö Kommun. The par
 ## Process
 To restrict the number of snow clearances, Växjö county decided to close the pitch upon snow depths above 2cm and one additional criterion is fulfilled: If there is snowfall or the snow will melt in the near future. Else, the pitch will be cleared. This is done by presenting weather API data, along with the measured and predicted data at the web application, to let the authorities make a decision. Upon a confirmed decision, this information is dispersed to the appropriate persons/teams. The image below shows the project flowchart.
 
-![The project process.](/img/flowchart.eps)
+![The project process.](/img/flowchart.jpg)
 <br>
 Flowchart of the project process.
 
