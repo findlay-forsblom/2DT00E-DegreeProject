@@ -22,4 +22,9 @@ The [Arduino Uno code](/Sensor/Sensor%20testing/Arduino) and [LoPy4 code](/Senso
 ## RHT03 relative humidity and temperature sensor
 The [Arduino Uno code](/Sensor/Sensor%20testing/Arduino) and [LoPy4 code](/Sensor/Sensor%20testing/LoPy/lib) can be found in the separate maps in Sensor testing. Link to [RHT03 datasheet](https://cdn.sparkfun.com/datasheets/Sensors/Weather/RHT03.pdf). The Arduino library for this sensor was provided by Sparkfun Electronics at the Github repository [SparkFun_RHT03_Arduino_Library](https://github.com/sparkfun/SparkFun_RHT03_Arduino_Library/). The LoPy4 library was written by the information provided in the datasheet. The pin connections to both microcontrollers can be viewed in the image below.
 
-![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/RHT03.jpg)x
+![Pin connections to the LoPy4 and Arduino Uno. Fritzing images are under CC-BY-SA license.](/Sensor/img/RHT03.jpg)
+
+## Microcontrollers
+The microcontrollers used in this project was Pycom LoPy4, mounted onto a Expansion Shield 3.0, and an Arduino Uno. The LoRa antenna was used when sending data through LoRaWAN, using the LoPy4 device. The microcontrollers can be viewed in the image below.
+
+![From the left: LoRa antenna, Pycom LoPy4 and Arduino Uno.](/Sensor/img/microcontrollers.jpg)
