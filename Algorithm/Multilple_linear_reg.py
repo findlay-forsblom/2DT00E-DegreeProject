@@ -50,3 +50,10 @@ print(f'Validation Score {round(accuracies.mean(),3)}')
 lol2= np.array([[0.07, 2, 0.5, 80, 0, 0,0,0,0,0,0,1,0,0,0,0,0,0,0]])
 regressor.predict(lol2)
 regressor.coef_
+
+columns = np.array(list(dataset))
+columns = columns[ind].tolist()
+
+import json
+with open('app.json', 'w', encoding='utf-8') as f:
+    json.dump(columns, f, ensure_ascii=False, indent=4)

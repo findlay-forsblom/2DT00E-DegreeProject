@@ -19,8 +19,8 @@ class ReadFiles:
     return dataset
 
  def removeDuplicates(self, arr):
-    for pd in arr:
-        pd.drop_duplicates(keep=False,inplace=True) 
+    for pds in arr:
+        pds.drop_duplicates(keep=False,inplace=True) 
     return arr
     
  def __dropColumns__(self, snowdepth, airtemp, typeofFall, fallAmount, luftFuktighet):
@@ -81,6 +81,7 @@ class ReadFiles:
     df_final = reduce(lambda left,right: pd.merge(left,right,on='Date', how='left'), dfs)
     
     df_final['Luftfuktighet'] = df_final['Luftfuktighet'].fillna(value=df_final['Luftfuktighet'].mean()) 
+    df_final['Precip Amount'] = df_final['Precip Amount'] * (10**-3)
     
     df = pd.DataFrame(data=typeofFall.values, columns=['Date', 'dummy'])
     just_dummies = pd.get_dummies(df['dummy'])

@@ -73,6 +73,12 @@ sums = (np.sum(sums)) / len(y_pred)
 
 print(f'Generalization error {round(sums * (10**3),3) }')
 
+
+import pickle 
+with open('./Models/randomForrest', 'wb') as f:
+    pickle.dump(regressor, f)
+
+
 regressor.feature_importances_
 
 columns = dataset.columns

@@ -1,7 +1,7 @@
 const { spawn } = require('child_process')
 
 module.exports.getData = async (testData) => {
-  const python = spawn('python3', ['script.py', testData])
+  const python = spawn('python', ['script.py', testData])
   let dataToSend
 
   const p = new Promise((resolve, reject) => {
