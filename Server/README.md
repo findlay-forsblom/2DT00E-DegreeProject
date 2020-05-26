@@ -1,4 +1,6 @@
 # Web application
+<b>The current version is only suitable for development at this stage.</b> [Read more](#security)
+
 The intended functionality of this web application was to present sensor and predicted data, along with weather API data, to restrict the number of snow clearances at artificial grass pitches in Växjö county. The application should also handle the information dispersing upon pitch closure or clearance. The web application was written in JavaScript with Node.js. The framework used was Express.js, along with numerous modules to build up functionality. The view engine used was Express-hbs (handlebars). Information was dispersed through email, using the nodemailer module. The different functionalities are explained below.
 
 ## Application usage
@@ -30,3 +32,4 @@ The user login data, along with pitch information and detection data were stored
 This implementation were only made to create the intended functionalities for the web application. Therefore, numerous security implementations have to be made before putting the web application into production. Also, GDPR regulations are not implemented. <b>The current version is only suitable for development at this stage.</b>
 
 ## IBGO API
+IBGO is a platform where bookings are handled for Växjö countys sport facilities. The usage of this API was made through reverse engineering, using Postman to find API calls, since it is not an open API. Both bookings and contact informations for the application was fetched using this API. 
