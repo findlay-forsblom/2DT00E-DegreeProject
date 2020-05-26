@@ -6,4 +6,4 @@ were obtained using gridsearch CV.
 
 ## Data pre-processing
 All data preprocessing is done in the *readFiles2* file. That is where all the different datasets are merged into one 
-single dataset. ![features](https://github.com/findlay-forsblom/2DT00E-DegreeProject/tree/master/Algorithm/images/features.PNG)
+single dataset. ![features](https://github.com/findlay-forsblom/2DT00E-DegreeProject/blob/master/Algorithm/images/features.PNG?raw=true)
