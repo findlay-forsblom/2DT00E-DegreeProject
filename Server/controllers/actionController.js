@@ -96,7 +96,7 @@ actionController.authorize = async (req, res, next) => {
  */
 actionController.decision = async (req, res, next) => {
   if (req.session.role === 'Admin') {
-    mailer.sendMail([development ? process.env.dev_email : process.env.dev_email2], req.body.title, msgToHTML(req.body.message), req.body.message)
+    mailer.sendMail([development ? process.env.dev_email : req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
     req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
   } else {
     req.session.flash = { type: 'danger', text: `Could not send email to ${req.body.email}` }
