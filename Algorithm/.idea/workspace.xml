@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4be037cc-9baa-469c-bb02-e836d31a1dd0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/DecisionTreeregression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/KnnRegression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/multipleLinearReg" beforeDir="false" afterPath="$PROJECT_DIR$/Models/multipleLinearReg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/multipleLinearRegV2" beforeDir="false" afterPath="$PROJECT_DIR$/Models/multipleLinearRegV2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MultipleLinearRegression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PolynomialRegression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RandomForrestRegression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SupportVectorRegression.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tpot.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/linearRegBiasVariance.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/readfiles.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testParamTpoty.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testscript.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tpot_exported_pipeline.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tpot_exported_pipeline2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/libs/predictor.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/libs/predictor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/models/MLmodel" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/models/MLmodel" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1bApQCnmZt685cBu9S6lwlZ8dgy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4be037cc-9baa-469c-bb02-e836d31a1dd0" name="Default Changelist" comment="" />
+      <created>1588084733192</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588084733192</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1588085130086">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1588085130086" />
+  </component>
+</project>
