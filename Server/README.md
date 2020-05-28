@@ -24,7 +24,7 @@ npm start
 ```
 
 ### Environment variables
-The server uses environent variables for sensitive information, such as API keys, etc. They are store in a file named .env, which is not uploaded to the repository and therefore needs to be created before running the application. 
+The server uses environent variables for sensitive information, such as API keys, etc. They are store in a file named .env, which is not uploaded to the repository and therefore needs to be created before running the application. Upon clarity of how the variables are defined, please visit the documentation respectively.
 
 | Environment variable | Description |
 | --- | --- |
