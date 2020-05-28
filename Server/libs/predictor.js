@@ -36,10 +36,9 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
   }
   console.log(results)
   return results
-  
 
   // if (snowDepth > 0) {
-   /*  console.log(date)
+  /*  console.log(date)
     const dayTmr = moment(moment().add(1, 'days')).format('MMMM Do YYYY')
     const temp = getAverageTemp(casts, date).toFixed(1)
     const tempTmr = getAverageTemp(casts, dayTmr).toFixed(1)
@@ -58,11 +57,11 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     const snowDepthDay1 = await pipeine.getData(encoded)
     console.log('The depth tmrw is ', snowDepthDay1) */
 
-    /**
+  /**
      * Predicting two days in the future
      */
 
-/*     let snowDepthDay1 = snowDepth
+  /*     let snowDepthDay1 = snowDepth
     let i
     const results = []
     for (i = 0; i < 3; i++) {
@@ -92,7 +91,7 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     }
     console.log(results) */
 
-/*     if (snowDepthDay1 > threshold) {
+  /*     if (snowDepthDay1 > threshold) {
       let i
       for (i = 1; i < 3; i++) {
         const day = moment(moment().add(i, 'days')).format('MMMM Do YYYY')
@@ -124,7 +123,7 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
       }
     } */
   // } else {
-    /**
+  /**
      * const result = checkForSnow(casts, date)
     const times = result.map(a => a.time) // Time to check again
     console.log(times)

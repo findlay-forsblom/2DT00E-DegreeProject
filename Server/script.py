@@ -7,7 +7,7 @@ Xtest = sys.argv[1]
 Xtest = Xtest.split(',')
 Xtest = np.array(Xtest, dtype=float)
 Xtest = np.reshape(Xtest, (1,-1))
-#print(Xtest)
+# print(Xtest)
 regressor = load('./models/randomForrest')
 pred = regressor.predict(Xtest)
 print(pred[0])

@@ -7,6 +7,7 @@ module.exports.getData = async (testData) => {
   const p = new Promise((resolve, reject) => {
     python.stdout.on('data', function (data) {
       dataToSend = data.toString()
+      console.log(dataToSend)
       resolve()
     })
   })
