@@ -8,7 +8,6 @@ const redis = require('redis')
 const redisClient = redis.createClient()
 const RedisStore = require('connect-redis')(session)
 const ttn = require('ttn')
-const { spawn } = require('child_process')
 const predictor = require('./libs/predictor.js')
 const Pitch = require('./models/pitchModel.js')
 
