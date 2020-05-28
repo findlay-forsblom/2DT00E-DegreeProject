@@ -1,4 +1,11 @@
 
+/**
+ * Creates and returns object of three consecutive days, from the input parameter day.
+ * @param {Date} today Date object
+ *
+ * @author Lars Petter Ulvatne
+ */
+
 function consecutiveDays (today = new Date()) {
   const oneDay = new Date()
   oneDay.setDate(today.getDate() + 1)

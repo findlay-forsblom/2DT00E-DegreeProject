@@ -1,6 +1,13 @@
+/**
+ * Predicts upcoming snow levels, by measured data, weather forecasts at site.
+ * Weather forcast precipitation are one hot encoded.
+ *
+ * @author Findlay Forsblom, Linnaeus University.
+ */
+
 const fetch = require('node-fetch')
 const moment = require('moment')
-const pipeine = require('../libs/mlPipeline.js')
+const pipeline = require('../libs/mlPipeline.js')
 const encoder = require('../libs/oneHotEncoding.js')
 
 module.exports.predict = async (data, geocode, threshold = 0) => {
@@ -24,17 +31,24 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     const humid = getAverageHumid(casts, date).toFixed(1)
     const precip = getAveragePrecip(casts, date)
     const precipAmount = getTotalPrecip(precip)
+
     let arr
     if (i === 0) {
-      arr = [snowDepth, parseInt(tempLora), parseInt(tempTmr), parseInt(humidLora), precipAmount]
+      // Add measured data
+      arr = [snowDepth, parseFloat(tempLora), parseFloat(tempTmr), parseFloat(humidLora), precipAmount]
     } else {
-      arr = [snowDepth, parseInt(temp), parseInt(tempTmr), parseInt(humid), precipAmount]
+      // Add forecast data
+      arr = [snowDepth, parseFloat(temp), parseFloat(tempTmr), parseFloat(humid), precipAmount]
     }
+
+    // One hot encode precipitations
     let encoded = encoder.encode(precip)
     encoded = arr.concat(encoded)
     encoded.shift()
     encoded = [snowDepthDay1].concat(encoded)
-    snowDepthDay1 = await pipeine.getData(encoded)
+
+    // Predict snowdepth of i'th day
+    snowDepthDay1 = await pipeline.getData(encoded)
     snowDepthDay1 = parseFloat(snowDepthDay1)
     results.push({ date: dayTmr, snowlevel: snowDepthDay1 })
   }

@@ -1,3 +1,9 @@
+/**
+ * Fetches Geodata using node-geocoder.
+ *
+ * @author Findlay Forsblom, Linnaeus University.
+ */
+
 const NodeGeocoder = require('node-geocoder')
 
 const options = {
