@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col">
                             <p class="pt-3">
-                                <b>{{date}}</b> <br>
+                                <b>{{date}}</b> {{#if @first}}&emsp;&nbsp;&nbsp;(H / L){{/if}}<br>
                             </p>
                             <div class="row">
                                 
@@ -18,8 +18,8 @@
                                 </div>
                                     
                                 <div class="col" style="width: fit-content;">
-                                    {{temp}} °C <br>
-                                    {{humid}} %<br>
+                                    {{highTemp}} / {{lowTemp}} °C<br>
+                                    {{highHumid}} / {{lowHumid}} %<br>
                                     {{symb.type_se}}<br>
                                 </div>
                                 <div class="col" style="width: fit-content;">
@@ -31,6 +31,6 @@
                 </div>
             </div>
             {{/each}}
-            <p style="font-size: 10px;text-align:right;padding: 0;margin: 0;"><i>Source: SMHI</i></p>
+            <p style="font-size: 10px;text-align:right;padding: 0;margin: 0;"><i>Data and image source: SMHI</i></p>
         </div>
         {{/if}}

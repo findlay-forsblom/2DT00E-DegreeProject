@@ -18,9 +18,6 @@ import palette
 from machine import Pin
 from machine import ADC
 
-# Number of calibration iterations
-CALIBRATION = 200
-
 SENSOR_NAME = 'HC_SR04'
 
 # Trigger and echo pin configurations.
@@ -55,11 +52,9 @@ def run_sensor(temp):
     # MCP9700A temperature sensor
     # T_A = temp.readTemp(analog_pin)
 
-    # RHT03 humidity/temperature sensor
-    # humid, T_A = RHT.run_sensor(analog_pin)
     if(isinstance(temp, str) == False):
         speed_sound = (331.4 + 0.6 * temp) * 0.0001        # cm/us
     else:
-        speed_sound = 331.4 * 0.0001        # cm/us
+        speed_sound = (331.4 + 0.6 * 14.5) * 0.0001        # cm/us
     # Calculate and print out distance measured.
     return ((utime.ticks_diff(finish, start)) * speed_sound)/2

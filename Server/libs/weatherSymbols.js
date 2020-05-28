@@ -33,16 +33,19 @@ function getSymbol (forecast) {
   forecast.forEach(forecast => {
     // Find right symbol to forecast.
     const symbol = symbols.filter(symb => {
-      return symb.id === forecast.params[4].values[0]
+      // return symb.id === forecast.params[4].values[0]
+      return symb.id === forecast.commonSymbol
     })
 
     // Push filtered forecast to array.
-    cast.push({
-      temp: forecast.params[0].values[0],
-      humid: forecast.params[1].values[0],
-      symb: symbol[0],
-      date: forecast.date
-    })
+    // cast.push({
+    //   temp: forecast.params[0].values[0],
+    //   humid: forecast.params[1].values[0],
+    //   symb: symbol[0],
+    //   date: forecast.date
+    // })
+    forecast.symb = symbol[0]
+    cast.push(forecast)
   })
 
   return cast

@@ -1,25 +1,39 @@
 # -*- coding: utf-8 -*-
+'''
+This main script will measure temperature and relative humdity with RHT03 sensor
+while not in demo mode. To measure depth from calibrated distance either HC_SR04
+or VL53L0X will be used. Uncomment the right library to use the sensor, and
+change to the wanted sensor name further down.
+
+The data will then be sent through LoRaWAN, when reaching depths over threshold
+value.
+
+@author Lars Petter Ulvatne, Linnaeus University.
+'''
 import pycom
 import time
 import machine
 import lib.lopy as LoPy
 import lib.palette as palette
 import lib.sensor_measurements as measurements
+import lib.keys as keys
+import lib.counter as cnt
 from machine import Pin
 from deepsleep import DeepSleep
 
 # Sensor scripts
 import lib.HC_SR04 as HC_SR04
 # import lib.VL53L0X as VL53L0X
-# import lib.MCP9700A as temp
 import lib.RHT03 as RHT03
 
+# PitchID. Id for the IBGO ID for the device at a specific pitch.
+# Should only be one number. This is for testing the application.
+pitch_id = [173, 38, 85, 50, 158 ]
 
 COLOUR_BLACK = 0x000000
 COLOUR_GREEN = 0x00FF00
 COLOUR_BLUE  = 0x0000FF
-pycom.heartbeat(False)              # disable the blue blinking
-ds = DeepSleep()
+pycom.heartbeat(False)              # disable the blue light
 
 '''
 Sensor names:
@@ -27,7 +41,15 @@ VL53L0X - Time of flight sensor (LIDAR)
 HC_SR04  - Ultrasonic sensor
 '''
 sensor = HC_SR04
-iter = 30
+iter = 20
+counter = 1
+
+# Predefined values for testing
+temp = -0.1
+humid = 80.1
+snow_depth = 3.2
+calibrated_distance = 0
+demo = True
 
 def humid_temp():
     try:
@@ -35,34 +57,44 @@ def humid_temp():
     except Exception as err:
         return ('Checksum error', 'Checksum error')
 
-calibrated_distance = measurements.measure(sensor, humid_temp()[1], iter)
-print(calibrated_distance, ': Calibrated')
+# Calibrate sensor
+if(not demo):
+    humid, temp = humid_temp()
+    calibrated_distance = measurements.measure(sensor, temp, iter)
+    print(calibrated_distance, ': Calibrated')
 time.sleep(2)
 
 while(True):
     try:
-        humid, temp = humid_temp()
-        print('Humidity: ', humid, '%')
-        print('Temperature: ', temp, '°C')
+        time.sleep(0.25)
 
-        time.sleep(2)
+        if(LoPy.joined()):
+            # Measure humidity and temperature with RHT03
+            if(not demo):
+                humid, temp = humid_temp()
+                print('Humidity: ', humid, '%')
+                print('Temperature: ', temp, '°C')
 
-        distance = measurements.measure(sensor, temp, 10)
-        print('Distance: ', distance)
-        depth = calibrated_distance - distance
+                print('Reading depth...')
+                pycom.rgbled(palette.COLOUR_DARKGREEN)
 
-        if(depth < 0.3):
-            if(depth < - 0.5):
-                # Recalibrating if distance is 0.2 below the 3mm buffer.
-                print('Recalibrating..')
-                calibrated_distance = measurements.measure(sensor, temp, iter)
-            depth = 0
+                distance = measurements.measure(sensor, temp, iter)
+                snow_depth = calibrated_distance - distance
+            ack_id = cnt.count(counter)
 
-        print('Depth: ', depth)
+            if(snow_depth > 2):
+                message = '{0},{1},{2},{3},{4}'.format(temp, humid, snow_depth, pitch_id[counter], ack_id)
+                LoPy.sendrecv(message)
+                counter = counter + 1
+                if(counter == 100):
+                    counter = 1
+                time.sleep(60)
 
-        print('Send humid, temp, depth with LoRa.')
-
-        # Wait to catch data.
-        time.sleep(10)
+            if(not demo):
+                print('Going into deep sleep..')
+                machine.deepsleep(60000*60*12)
+        else:
+            print('Connecting to gateway..')
+            LoPy.connect_lora()
     except Exception as err:
-        console.log(err)
+        print(err)

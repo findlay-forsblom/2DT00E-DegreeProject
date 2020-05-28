@@ -42,7 +42,7 @@ const longlatGen = require('./libs/longLatGen.js')
 const lol = longlatGen.gen('Araby Växjö', '35260')
 lol.then(results => {
   console.log(results)
-  const data = { snow: 1, temp: -5, humudity: 80 }
+  const data = { snow: 0.05, temp: -5, humudity: 80 }
   const prediction = predictor.predict(data, results)
 })
 
@@ -72,7 +72,6 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use((req, res, next) => {
   // flash messages - survives only a round trip
-  console.log(req.session)
   if (req.session.flash) {
     res.locals.flash = req.session.flash
     delete req.session.flash
@@ -111,21 +110,21 @@ app.use((err, req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'assets', 'html', '500.html'))
 })
 
-async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch: 50 }, predict = { first: 2.4, second: 1.1 }) {
-  console.log('NEW ACTION')
+async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 85 }, predict = { first: 2.4, second: 1.1 }) {
   const today = new Date()
 
   const book = require('./libs/bookings')
   const data = await book.fetchBookings(today.toDateString(), sensor.pitch)
   const bookings = book.handleInfo(data.bookings, data.contact)
 
-  console.log(bookings, data)
   const Action = require('./models/actionModel.js')
   const days = require('./libs/threeDates').consecutiveDays()
 
   const action = new Action({
     id: sensor.pitch,
     name: data.pitch.name,
+    names: data.pitch.mult_names,
+    clearEmail: data.pitch.clear_email,
     bookings: JSON.stringify(bookings),
     today: days.today.toDateString(),
     oneDay: days.oneDay.toDateString(),
@@ -134,10 +133,7 @@ async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch:
     prediction: JSON.stringify(predict)
   })
 
-  console.log(JSON.parse(action.sensor).temp)
-
   const savedAction = await action.save()
-  console.log(savedAction._id, 'SAVED ACTION')
 
   const mailer = require('./libs/mailer')
   mailer.sendMail(
@@ -149,41 +145,54 @@ async function newAction (sensor = { temp: 14.3, humid: 42.2, depth: 2.1, pitch:
 }
 
 // newAction()
+
+async function addPitch () {
+  const Pitch = require('./models/pitchModel.js')
+  const pitch = new Pitch({
+    id: 85,
+    name: 'Värendsvallen Konstgräsplan',
+    mult_id: JSON.stringify([85, 212, 213]),
+    mult_names: JSON.stringify(['Plan C', 'Plan C - Halvplan 1', 'Plan C - Halvplan 2'])
+  })
+  await pitch.save()
+}
+
+// addPitch()
 // TTN =>
-// const detections = {}
+const detections = {}
 
 // Listen for changes on application from TTN.
-// ttn.data(process.env.appID, process.env.accessKey)
-//   .then((client) => {
-//     client.on('uplink', async (devID, payload) => {
-//       const value = payload.payload_fields
-//       console.log(value, ': IS THE VALUE!!')
+ttn.data(process.env.appID, process.env.accessKey)
+  .then((client) => {
+    client.on('uplink', async (devID, payload) => {
+      const value = payload.payload_fields
 
-//       // const isAck = value.includes('ack')
+      const isAck = value.values.includes('ack')
 
-//       // isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
-
-//       // if (isAck) {
-//       //   // If ack was received => Extract message and delete from object.
-//       //   const ack = value.substring(3)
-//       //   delete detections[ack]
-//       // } else if (detections[value] === undefined) {
-//       //   // Notify video server and client through detectedLoRa function
-//       //   console.log('YAAAAY!')
-//       //   // detectedLora(STREAM_SERVER, client, io, payload, detections, value)
-//       // } else if (detections[value]) {
-//       //   // Add counts of detections. If 2 counts found send another ack.
-//       //   detections[value] = detections[value]++
-//       //   if (detections[value] > 2) {
-//       //     client.send(payload.dev_id, [value.substring(value.length - 2)])
-//       //     console.log('Sent new ack to node.')
-//       //   }
-//       // }
-//     })
-//   })
-//   .catch((err) => {
-//     console.log(err)
-//   })
+      isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
+      if (isAck) {
+        // If ack was received => Extract message and delete from object.
+        const ack = value.values.substring(3)
+        delete detections[ack]
+      } else if (detections[value.values] === undefined) {
+        // Send ack to client.
+        client.send(payload.dev_id, [value.values.substring(value.values.length - 3)])
+        detections[value.values] = 1
+        console.log('Sent ack to node.')
+        newAction(value)
+      } else if (detections[value.values]) {
+        // Add counts of detections. If 2 counts found send another ack.
+        detections[value.valuess] = detections[value.values]++
+        if (detections[value.values] > 2) {
+          client.send(payload.dev_id, [value.values.substring(value.values.length - 3)])
+          console.log('Sent new ack to node.')
+        }
+      }
+    })
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
 // END TTN
 

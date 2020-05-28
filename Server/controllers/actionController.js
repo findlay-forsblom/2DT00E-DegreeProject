@@ -7,9 +7,12 @@ const mailer = require('../libs/mailer')
 const actionController = {}
 const err = {}
 
+// Run development functions if true
+const development = true
+
 actionController.index = async (req, res, next) => {
-  // Fetch Action history
-  const action = await Action.find({})
+  // Fetch Action history if query, else fetch only todays actions
+  const action = req.query.all === 'true' ? await Action.find({}) : await Action.find({ today: new Date().toDateString() })
 
   // Must create new object from database to be able to render page with information.
   const context = { actions: arrangeAction(action.reverse()) }
@@ -38,10 +41,13 @@ actionController.index = async (req, res, next) => {
     // Filter to unique emails to form rendering
     emails = bookings.map(booking => { return booking.contact }).filter(onlyUnique)
   }
-
   // Get current dates, filtered forecasts with corresponding symbols.
   const days = require('../libs/threeDates').consecutiveDays()
-  const forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
+  let forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
+  forecast = forecast.filter((element) => {
+    // Filter out undefined values
+    return element !== undefined
+  })
   const forecastSymbols = weatherSymb.getSymbol(forecast)
 
   res.render('action/decision', {
@@ -51,7 +57,8 @@ actionController.index = async (req, res, next) => {
     forecast: forecastSymbols,
     sensor: sensor,
     predict: prediction,
-    emails: emails
+    emails: emails,
+    all: req.query.all === 'true' ? true : undefined
   })
 }
 
@@ -80,7 +87,7 @@ actionController.authorize = async (req, res, next) => {
  */
 actionController.decision = async (req, res, next) => {
   if (req.session.role === 'Admin') {
-    mailer.sendMail([req.body.email], req.body.title, msgToHTML(req.body.message), req.body.message)
+    mailer.sendMail([development ? process.env.dev_email : process.env.dev_email2], req.body.title, msgToHTML(req.body.message), req.body.message)
     req.session.flash = { type: 'success', text: `Email(s) successfully sent to ${req.body.email}` }
   } else {
     req.session.flash = { type: 'danger', text: `Could not send email to ${req.body.email}` }
@@ -94,20 +101,64 @@ actionController.decision = async (req, res, next) => {
  * @param {Array} days Array of dates.
  * @param {Array} time Array of time.
  */
-async function getForecast (days, time) {
+async function getForecast (days) {
   const forecast = await forecaster.forecast()
   const result = []
 
   for (let i = 0; i < days.length; i++) {
     const day = days[i].split(' ')
+    day[2] = parseInt(day[2], 10).toString()
+
     const dayArr = forecast.filter(cast => {
-      return cast.date.includes(day[1]) && cast.date.includes(day[2]) &&
-      cast.time.includes(time[i][0]) && cast.time.includes(time[i][1])
+      return cast.date.includes(day[1]) && cast.date.includes(day[2])
     })
-    result.push(dayArr[0])
+
+    // Initialize the return object
+    const weather = {
+      date: dayArr[0].date,
+      lowTemp: dayArr[0].params[0].values[0],
+      highTemp: dayArr[0].params[0].values[0],
+      lowHumid: dayArr[0].params[1].values[0],
+      highHumid: dayArr[0].params[1].values[0],
+      symbol: []
+    }
+
+    // Find lowest/highest temp/humidity and add weather symbols.
+    dayArr.forEach((item, idx) => {
+      const temp = item.params[0].values[0]
+      const humid = item.params[1].values[0]
+      if (temp < weather.lowTemp) {
+        weather.lowTemp = temp
+      } else if (temp > weather.highTemp) {
+        weather.highTemp = temp
+      }
+
+      if (humid < weather.lowHumid) {
+        weather.lowHumid = humid
+      } else if (humid > weather.highHumid) {
+        weather.highHumid = humid
+      }
+
+      weather.symbol.push(item.params[4].values[0])
+    })
+
+    // Find most common weather symbol and push to result
+    weather.commonSymbol = mode(weather.symbol)
+    result.push(weather)
   }
 
   return result
+}
+
+/**
+ * Finds the most common element in an array.
+ * @param {Array} arr Array
+ */
+function mode (arr) {
+  return arr.sort((a, b) =>
+    arr.filter(v => v === a).length -
+      arr.filter(v => v === b).length
+  ).pop()
 }
 
 /**
@@ -120,6 +171,8 @@ function arrangeAction (action) {
       _id: act._id,
       id: act.id,
       name: act.name,
+      names: JSON.parse(act.names),
+      clearEmail: act.clearEmail,
       bookings: JSON.parse(act.bookings),
       today: act.today,
       oneDay: act.oneDay,
@@ -202,7 +255,7 @@ module.exports = actionController
 
 //   // Print out the unique bookings.
 //   bookings.forEach(booking => {
-//     console.log(booking.start + '-' + booking.end + '. Team: ' + booking.description.replace('<br><br>', ' ') + '. Status: ' + booking.status)
+//      .log(booking.start + '-' + booking.end + '. Team: ' + booking.description.replace('<br><br>', ' ') + '. Status: ' + booking.status)
 //   })
 
 //   const teams = bookings.map(booking => booking.description.replace('<br><br>', ' ').split(' '))
