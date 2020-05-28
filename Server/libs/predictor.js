@@ -8,6 +8,8 @@ const encoder = require('../libs/oneHotEncoding.js')
 
 module.exports.predict = async (data, geocode, threshold = 0) => {
   const snowDepth = data.snow
+  const tempLora = data.temp
+  const humidLora = data.humudity
 
   const lat = (geocode.lat).toFixed(3)
   const lon = (geocode.long).toFixed(3)
@@ -25,7 +27,12 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     const humid = getAverageHumid(casts, date).toFixed(1)
     const precip = getAveragePrecip(casts, date)
     const precipAmount = getTotalPrecip(precip)
-    const arr = [snowDepth, parseInt(temp), parseInt(tempTmr), parseInt(humid), precipAmount]
+    let arr
+    if (i === 0) {
+      arr = [snowDepth, parseInt(tempLora), parseInt(tempTmr), parseInt(humidLora), precipAmount]
+    } else {
+      arr = [snowDepth, parseInt(temp), parseInt(tempTmr), parseInt(humid), precipAmount]
+    }
     let encoded = encoder.encode(precip)
     encoded = arr.concat(encoded)
     encoded.shift()
@@ -34,9 +41,7 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
     snowDepthDay1 = parseFloat(snowDepthDay1)
     results.push({ date: dayTmr, snowlevel: snowDepthDay1 })
   }
-  console.log(results)
   return results
-  
 
   // if (snowDepth > 0) {
    /*  console.log(date)
