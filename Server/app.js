@@ -12,6 +12,7 @@ const predictor = require('./libs/predictor.js')
 const Pitch = require('./models/pitchModel.js')
 
 const siteUrl = 'http://localhost:8000'
+const port = 8000
 
 dotenv.config({
   path: './.env'
@@ -40,22 +41,10 @@ const sessionOptions = {
 
 app.use(session(sessionOptions))
 
-// const lol2 = async () => {
-//   const longlatGen = require('./libs/longLatGen.js')
-//   const lol = await longlatGen.gen('Bollgatan 1 Växjö', '35246')
-//   const data = { snow: 0.05, temp: -5, humudity: 80 }
-//   const prediction = await predictor.predict(data, lol)
-//   console.log('PREDICTION: ', prediction)
-// }
-
-// lol2()
-
 mongoose.connect().catch(error => {
   console.log(error)
   process.exit(1)
 })
-
-const port = 8000
 
 app.use('/public', express.static(path.join(__dirname, '/public')))
 app.use(express.static(path.join(__dirname, '/public')))
@@ -114,9 +103,15 @@ app.use((err, req, res, next) => {
   res.sendFile(path.join(__dirname, 'public', 'assets', 'html', '500.html'))
 })
 
+/**
+ * Creates a new action, which is saved to the database and sends email to the responsible user email for pitch actions.
+ * @param {Object} sensor Sensor data from TTN.
+ * @param {Object} predict Predicted snow depths for next two days.
+ */
 async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 85 }, predict = { first: 2.4, second: 1.1 }) {
   const today = new Date()
 
+  // Fetches bookings at the pitch from IBGO.
   const book = require('./libs/bookings')
   const data = await book.fetchBookings(today.toDateString(), sensor.pitch)
   const bookings = book.handleInfo(data.bookings, data.contact)
@@ -124,6 +119,7 @@ async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 
   const Action = require('./models/actionModel.js')
   const days = require('./libs/threeDates').consecutiveDays()
 
+  // Data to save at database.
   const action = new Action({
     id: sensor.pitch,
     name: data.pitch.name,
@@ -136,9 +132,9 @@ async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 
     sensor: JSON.stringify(sensor),
     prediction: JSON.stringify(predict)
   })
-
   const savedAction = await action.save()
 
+  // Send email to responsible authority.
   const mailer = require('./libs/mailer')
   mailer.sendMail(
     [process.env.pitch_email],
@@ -148,21 +144,7 @@ async function newAction (sensor = { temp: 0.3, humid: 42.2, depth: 2.1, pitch: 
   )
 }
 
-// // newAction()
-
-// async function addPitch () {
-//   const Pitch = require('./models/pitchModel.js')
-//   const pitch = new Pitch({
-//     id: 85,
-//     name: 'Värendsvallen Konstgräsplan',
-//     mult_id: JSON.stringify([85, 212, 213]),
-//     mult_names: JSON.stringify(['Plan C', 'Plan C - Halvplan 1', 'Plan C - Halvplan 2'])
-//   })
-//   await pitch.save()
-// }
-
-// addPitch()
-// TTN =>
+// List for acknowledgements
 const detections = {}
 
 // Listen for changes on application from TTN.
@@ -171,9 +153,10 @@ ttn.data(process.env.appID, process.env.accessKey)
     client.on('uplink', async (devID, payload) => {
       const value = payload.payload_fields
 
+      // Check if message is acknowledgement message.
       const isAck = value.values.includes('ack')
-
       isAck ? console.log('Received ack from ', devID) : console.log('Received uplink from ', devID)
+
       if (isAck) {
         // If ack was received => Extract message and delete from object.
         const ack = value.values.substring(3)
@@ -198,7 +181,7 @@ ttn.data(process.env.appID, process.env.accessKey)
         const second = Math.round(prediction[1].snowlevel * 1000) / 10
         newAction(value, { first: first, second: second })
       } else if (detections[value.values]) {
-        // Add counts of detections. If 2 counts found send another ack.
+        // Add counts of detections. If 2 counts found send another ack to LoRa device.
         detections[value.valuess] = detections[value.values]++
         if (detections[value.values] > 2) {
           client.send(payload.dev_id, [value.values.substring(value.values.length - 3)])

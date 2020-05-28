@@ -40,74 +40,75 @@ module.exports.predict = async (data, geocode, threshold = 0) => {
   }
   return results
 
-function getTotalPrecip (data) {
-  let sum = 0
-  for (const i in data) {
-    sum += data[i] * Math.pow(10, -2)
-  }
-  return sum
-}
-
-function getAverageTemp (data, day) {
-  const arr = data.filter(e => e.date === day)
-  let sum = 0
-  let count = 0
-  arr.forEach(element => {
-    count++
-    const param = element.params.filter(e => e.name === 't')
-    sum += param[0].values[0]
-  })
-  return sum / count
-}
-
-function getAverageHumid (data, day) {
-  const arr = data.filter(e => e.date === day)
-  let sum = 0
-  let count = 0
-
-  arr.forEach(element => {
-    count++
-    const param = element.params.filter(e => e.name === 'r')
-    sum += param[0].values[0]
-  })
-  return sum / count
-}
-
-function getAveragePrecip (data, day) {
-  const arr = data.filter(e => e.date === day)
-  const dict = {}
-
-  arr.forEach(element => {
-    const param = element.params.filter(e => e.name === 'pmean' || e.name === 'pcat')
-    const key = param[0].values
-    if (!(key in dict)) {
-      dict[key] = []
+  function getTotalPrecip (data) {
+    let sum = 0
+    for (const i in data) {
+      sum += data[i] * Math.pow(10, -2)
     }
-    const arr = dict[key]
-    arr.push(param[1].values[0])
-  })
-
-  for (const i in dict) {
-    const val = dict[i]
-    let sum = val.reduce((a, b) => a + b, 0)
-    sum = sum.toFixed(1)
-    dict[i] = sum
+    return sum
   }
-  return dict
-}
 
-async function getForecasts (SMHI) {
-  const response = await fetch(SMHI)
-  const data = await response.json()
-  const arr = data.timeSeries
+  function getAverageTemp (data, day) {
+    const arr = data.filter(e => e.date === day)
+    let sum = 0
+    let count = 0
+    arr.forEach(element => {
+      count++
+      const param = element.params.filter(e => e.name === 't')
+      sum += param[0].values[0]
+    })
+    return sum / count
+  }
 
-  const casts = []
-  arr.forEach(element => {
-    let time = moment(element.validTime).format('MMMM Do YYYY, h:mm:ss a')
-    time = time.split(',')
-    const params = element.parameters
-    const filtered = params.filter(e => e.name === 'pmean' || e.name === 't' || e.name === 'r' || e.name === 'pcat')
-    casts.push({ date: time[0], time: time[1], params: filtered })
-  })
-  return casts
+  function getAverageHumid (data, day) {
+    const arr = data.filter(e => e.date === day)
+    let sum = 0
+    let count = 0
+
+    arr.forEach(element => {
+      count++
+      const param = element.params.filter(e => e.name === 'r')
+      sum += param[0].values[0]
+    })
+    return sum / count
+  }
+
+  function getAveragePrecip (data, day) {
+    const arr = data.filter(e => e.date === day)
+    const dict = {}
+
+    arr.forEach(element => {
+      const param = element.params.filter(e => e.name === 'pmean' || e.name === 'pcat')
+      const key = param[0].values
+      if (!(key in dict)) {
+        dict[key] = []
+      }
+      const arr = dict[key]
+      arr.push(param[1].values[0])
+    })
+
+    for (const i in dict) {
+      const val = dict[i]
+      let sum = val.reduce((a, b) => a + b, 0)
+      sum = sum.toFixed(1)
+      dict[i] = sum
+    }
+    return dict
+  }
+
+  async function getForecasts (SMHI) {
+    const response = await fetch(SMHI)
+    const data = await response.json()
+    const arr = data.timeSeries
+
+    const casts = []
+    arr.forEach(element => {
+      let time = moment(element.validTime).format('MMMM Do YYYY, h:mm:ss a')
+      time = time.split(',')
+      const params = element.parameters
+      const filtered = params.filter(e => e.name === 'pmean' || e.name === 't' || e.name === 'r' || e.name === 'pcat')
+      casts.push({ date: time[0], time: time[1], params: filtered })
+    })
+    return casts
+  }
 }
