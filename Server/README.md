@@ -11,9 +11,14 @@ The following command installs the node modules used in this application.
 npm install
 ```
 
-Runs the application. 
+To run the application in development mode:
 ```
-npm start || npm run devstart
+npm run devstart
+```
+
+The following command will run the application in production mode:
+```
+npm start
 ```
 
 ## Application usage
