@@ -1,10 +1,11 @@
-const data = require('../app.json')
-var OneHot = require('one-hot')
-const obj = data
-var oneHot = new OneHot();
-// oneHot.encode(obj)
+/**
+ * One hod encodes the weather forcasts for machine learning, to match the trained data set.
+ *
+ * @author Findlay Forsblom, Linnaeus University.
+ */
 
-const zeros = new Array(obj.length).fill(0);
+const obj = require('../app.json')
+const zeros = new Array(obj.length).fill(0)
 
 let counter = 0
 const dict = {}
@@ -30,7 +31,6 @@ module.exports.encode = (precip) => {
     for (const i in precip) {
       const type = values[i]
       arr.push(dict[type] || zeros)
-      // console.log(arr)
     }
     const sums = arr[0].map(
       (x, idx) => arr.reduce((sum, curr) => sum + curr[idx], 0)

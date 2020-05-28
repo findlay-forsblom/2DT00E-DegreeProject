@@ -1,3 +1,9 @@
+/**
+ * Index page controller. Handles authentication/authorization.
+ *
+ * @author Findlay Forsblom, Linnaeus University.
+ */
+
 const passwordChecker = require('../libs/passwordChecker.js')
 
 const homeController = {}
@@ -67,7 +73,6 @@ homeController.login = async (req, res, next) => {
 }
 
 homeController.registerPost = async (req, res, next) => {
-  console.log('I am here boi')
   let username = req.body.username
   let email = req.body.email
   const password = req.body.password

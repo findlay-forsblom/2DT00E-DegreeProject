@@ -1,9 +1,19 @@
+/**
+ * Fetches forecasts from SMHI's API.
+ *
+ * @author Findlay Forsblom, Linnaeus University.
+ */
+
 const fetch = require('node-fetch')
 const moment = require('moment')
 
-async function forecast () {
+/**
+ * Fetches forecasts by fetching latitude and longitudes and requesting the data from API url.
+ * @param {Object} geoInfo Object with strings of address and zip code
+ */
+async function forecast (geoInfo) {
   const longlatGen = require('../libs/longLatGen.js')
-  const geo = longlatGen.gen('Araby Växjö', '35260')
+  const geo = longlatGen.gen(geoInfo.address, geoInfo.zip)
 
   return geo.then(async (results) => {
     const lat = (results.lat).toFixed(3)
@@ -14,6 +24,9 @@ async function forecast () {
   })
 }
 
+/**
+ * Parses and forms the forecast information fetched from API.
+ */
 async function getForecasts (SMHI) {
   const response = await fetch(SMHI)
   const data = await response.json()
