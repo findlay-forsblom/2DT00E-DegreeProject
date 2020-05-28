@@ -19,6 +19,13 @@ The weather forcasts were fetched from the [Swedish Meteorological and Hydrologi
 ## Machine Learning
 The machine learning algorithm used Random Forrest to predict the upcoming snow depth, using the measured snow depth and weather forecasts as input parameters. The algorithm was written in Python, why the JavaScript had to be spawned into Python. When predictions were made, an email was sent to the authority handeling the decision making process.
 
+## Versions for machine learning
+When running the server and using the predifined machine learning models in the ml folder then you should make sure that the follwing verisons of ther foloowing libraries are used
+
+* sckit-learn - 0.22.1
+* numpy - 1.18.1
+* joblib - 0.14.1
+
 ## Nodemailer
 The emails dispersing was implemented with nodemailer. This was used both upon notifying authorities that decision might be needed, upon snow level detections, and upon dispersing information upon a confirmed decision. 
 

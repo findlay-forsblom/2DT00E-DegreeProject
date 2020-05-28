@@ -9,3 +9,4 @@ All data preprocessing is done in the *readFiles2* file. That is where all the d
 single dataset. The picture below shows the features used and their original datasets. This was a supervised learning 
 approach with variable no 2 being the target variable and the rest as predictors.
 ![features](https://github.com/findlay-forsblom/2DT00E-DegreeProject/blob/master/Algorithm/images/features.PNG?raw=true)
+
