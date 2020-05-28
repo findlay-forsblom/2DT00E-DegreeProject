@@ -5,7 +5,9 @@ const pitchSchema = mongoose.Schema({
   name: { type: String, required: true },
   mult_id: { type: String },
   mult_names: { type: String },
-  clear_email: { type: String }
+  clear_email: { type: String },
+  address: { type: String },
+  zip: { type: String }
 })
 
 const Schema = mongoose.model('Pitch', pitchSchema)

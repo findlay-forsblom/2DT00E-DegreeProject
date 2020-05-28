@@ -2,6 +2,7 @@
 
 const forecaster = require('../libs/forecast')
 const Action = require('../models/actionModel.js')
+const Pitch = require('../models/pitchModel.js')
 const weatherSymb = require('../libs/weatherSymbols')
 const mailer = require('../libs/mailer')
 const actionController = {}
@@ -23,10 +24,11 @@ actionController.index = async (req, res, next) => {
   // Parameters to pass for rendering
   const currentArr = []
   let currentContext, bookings, sensor, prediction, emails
+  let pitch = { address: 'Växjö', zip: '35232' }
 
   if (current) {
     currentArr.push(current)
-
+    pitch = await Pitch.findOne({ id: current.id })
     currentContext = { currentAction: arrangeAction(currentArr) }
 
     // If action found => Add to objects outside if-statement.
@@ -43,7 +45,7 @@ actionController.index = async (req, res, next) => {
   }
   // Get current dates, filtered forecasts with corresponding symbols.
   const days = require('../libs/threeDates').consecutiveDays()
-  let forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], [['11', 'pm'], ['8', 'am'], ['8', 'am']])
+  let forecast = await getForecast([days.today.toDateString(), days.oneDay.toDateString(), days.twoDays.toDateString()], { address: pitch.address, zip: pitch.zip })
   forecast = forecast.filter((element) => {
     // Filter out undefined values
     return element !== undefined
@@ -101,8 +103,8 @@ actionController.decision = async (req, res, next) => {
  * @param {Array} days Array of dates.
  * @param {Array} time Array of time.
  */
-async function getForecast (days) {
-  const forecast = await forecaster.forecast()
+async function getForecast (days, geo) {
+  const forecast = await forecaster.forecast(geo)
   const result = []
 
   for (let i = 0; i < days.length; i++) {

@@ -1,9 +1,9 @@
 const fetch = require('node-fetch')
 const moment = require('moment')
 
-async function forecast () {
+async function forecast (geoInfo) {
   const longlatGen = require('../libs/longLatGen.js')
-  const geo = longlatGen.gen('Araby Växjö', '35260')
+  const geo = longlatGen.gen(geoInfo.address, geoInfo.zip)
 
   return geo.then(async (results) => {
     const lat = (results.lat).toFixed(3)
