@@ -4,7 +4,9 @@
 The intended functionality of this web application was to present sensor and predicted data, along with weather API data, to restrict the number of snow clearances at artificial grass pitches in Växjö county. The application should also handle the information dispersing upon pitch closure or clearance. The web application was written in JavaScript with Node.js. The framework used was Express.js, along with numerous modules to build up functionality. The view engine used was Express-hbs (handlebars). Information was dispersed through email, using the nodemailer module. The different functionalities are explained below.
 
 ## Starting the web application
-To start the web application, the following commands should be used.
+To start the web application, the following commands should be used. Make sure the latest version of Node.js is installed. Redis is used for storing session variables. Make sure the Redis server is up and running, upon starting the application, [read more](https://redis.io/topics/quickstart).
+
+### Using Node
 
 The following command installs the node modules used in this application.
 ```
@@ -20,6 +22,22 @@ The following command will run the application in production mode:
 ```
 npm start
 ```
+
+### Environment variables
+The server uses environent variables for sensitive information, such as API keys, etc. They are store in a file named .env, which is not uploaded to the repository and therefore needs to be created before running the application. 
+
+| Environment variable | Description |
+| --- | --- |
+| SESSION_NAME | The session name used for Express-session |
+| SESSION_SECRET | Used for Express-session to sign the session name cookie |
+| CONNECTION_STRING | Used to connect to MongoDB database |
+| APIkey  | Google GeoCoding API key  |
+|  appID | The application ID at The Things Network  |
+|  accessKey | The access key to the application at The Things Network  |
+| dev_email  | Email to send when using development in actionController.js  |
+| dev_email2 | Email to send when using development in actionController.js  |
+| pitch_email | Email address to send email upon snow level detection |
+| EMAIL  | Email address that nodemailer uses to send emails from   |
 
 ## Application usage
 Upon detections of snow levels above 2 cm, a notification email is sent to the county authority (user) responsible for pitch actions. The user follows a link to the application page. If the user is not logged in already, the login page is rendered and upon successful login a redirect to the pitch page, as seen in the image below. Based on the sensor data ("Mätdata"), predicted upcoming snow levels ("Förväntat snödjup") and weather forecasts, a decision is made. Upon pitch clearance (yellow button), an email is sent to the responsible for clearing the particular pitch. Upon pitch closure (red button) an email is sent to all contacts found in the bookings section, fetched from the [IBGO API](#ibgo-api).
