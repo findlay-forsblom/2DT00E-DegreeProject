@@ -55,7 +55,7 @@ The weather forcasts were fetched from the [Swedish Meteorological and Hydrologi
 ## Machine Learning
 The machine learning algorithm used Random Forrest to predict the upcoming snow depth, using the measured snow depth and weather forecasts as input parameters. The algorithm was written in Python, why the JavaScript had to be spawned into Python. When predictions were made, an email was sent to the authority handeling the decision making process.
 
-## Versions for machine learning
+### Versions for machine learning
 When running the server and using the predefined machine learning models in the models folder, then you should make sure that the  versions of the following libraries are used:
 
 * scikit-learn - 0.22.1
