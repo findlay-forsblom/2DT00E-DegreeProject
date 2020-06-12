@@ -100,7 +100,7 @@ homeController.registerPost = async (req, res, next) => {
       req.session.userId = user.id
       req.session.username = user.username
       req.session.role = user.role
-      res.redirect('/action/test')
+      res.redirect('/action')
     } catch (error) {
       req.session.flash = { type: 'danger', text: error.message }
       res.redirect('/register')
