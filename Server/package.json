@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/findlay-forsblom/2DT00E-DegreeProject#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bcrypt": "^4.0.1",
     "connect-redis": "^4.0.4",
     "dotenv": "^8.2.0",
