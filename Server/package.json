@@ -38,7 +38,7 @@
     "ttn": "^2.3.3"
   },
   "devDependencies": {
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "nodemon": "^2.0.3",
     "snazzy": "^8.0.0",
     "standard": "^14.3.4"
