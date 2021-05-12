@@ -32,7 +32,7 @@
     "mongoose": "^5.9.9",
     "mongoose-unique-validator": "^2.0.3",
     "node-geocoder": "^3.27.0",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.16",
     "one-hot": "^2.1.4",
     "redis": "^3.0.2",
     "ttn": "^2.3.3"
